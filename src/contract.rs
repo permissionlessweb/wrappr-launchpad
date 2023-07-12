@@ -4,6 +4,8 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 use cosmwasm_std::Addr;
 use cw2::set_contract_version;
 
+use crate::query::{check_fee, query_fee_info} // mint fee 
+
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 use crate::state::{Ids, Amounts};
@@ -112,7 +114,7 @@ pub fn execute(
             to,
             manager,
         } => execute_set_manager(
-            deps, env, info, to, manager,
+            deps, env, info, to, set,
         ),
         ExecuteMsg::SetAdmin {
             to,
@@ -169,6 +171,13 @@ fn execute_mint(
     owner: Addr,
 ) -> Result<Response, ContractError> {
     // mint logic
+    // - if the mint fee is not zero, require the fee 
+
+    // - panic if id is already registered
+    
+    // - if the owner does not equal 0, set owner of id to the owner
+
+    // - register the id 
 }
 
 fn execute_burn(
@@ -180,6 +189,8 @@ fn execute_burn(
     amount: u64,
 ) -> Result<Response, ContractError> {
     // burn logic
+
+    // check if the message sender is able to burn tokens. Only the owner and admin may call the burn function. 
 }
 
 fn execute_manage_mint(
@@ -194,8 +205,14 @@ fn execute_manage_mint(
     owner: Addr,
 ) -> Result<Response, ContractError> {
     // manage mint logic:
-    //
+
     // require message sender to be the owner, manager, or admin
+
+    // if the id is not registered, register it.
+
+    // if there is no owner of the id, assign the owner to the id. 
+    // Check to make sure that the newly assigned owner does not equal 0.
+
 
 }
 
@@ -208,7 +225,7 @@ fn execute_manage_burn(
     amount: u64,
 ) -> Result<Response, ContractError> {
     // manage burn logic
-    //
+
     // require message sender to be the owner, manager, or admin
 }
 
@@ -220,8 +237,10 @@ fn execute_set_owner_of(
     id: u64,
 ) -> Result<Response, ContractError> {
     // set owner of logic
-    //
+
     // requre message sender to only be owner of, or admin of the id
+    
+    // set the ownerOf[to]
 }
 
 fn execute_set_transferability(
@@ -232,8 +251,10 @@ fn execute_set_transferability(
     set: bool,
 ) -> Result<Response, ContractError> {
     // set transferability logic
-    //
+
     // requre message sender to only be owner of, or admin of the id
+
+    // set the transferable[id] 
 }
 
 fn execute_set_permissions(
@@ -244,8 +265,10 @@ fn execute_set_permissions(
     set: bool,
 ) -> Result<Response, ContractError> {
     // set permissions logic
-    //
+
     // requre message sender to only be owner of, or admin.
+
+    // set the permissioned[id]
 }
 
 fn execute_set_user_permissions(
@@ -257,8 +280,10 @@ fn execute_set_user_permissions(
     set: bool,
 ) -> Result<Response, ContractError> {
     // set user permissions logic
-    //
+
     // requre message sender to only be owner of, or admin.
+
+    // set a userPermissioned[to][id]
 }
 
 fn execute_set_uri(
@@ -268,7 +293,11 @@ fn execute_set_uri(
     id: u64,
     token_uri: String,
 ) -> Result<Response, ContractError> {
+    // set uri logic
 
+    // require message sender to only be owner of, or admin. 
+
+    // uris[id] = tokenURI;
 }
 
 fn execute_set_user_uri(
@@ -280,8 +309,10 @@ fn execute_set_user_uri(
     user_uri: String,
 ) -> Result<Response, ContractError> {
     // set user_uri logic
-    //
-    // requre message sender to only be owner of, or admin.
+
+    // requre message sender to only be owner of, or admin of the id.
+
+    // userURI[to][id] = uuri;
 }
 
 fn execute_set_manager(
@@ -289,11 +320,13 @@ fn execute_set_manager(
     _env: Env,
     info: MessageInfo,
     to: Addr,
-    manager: bool,
+    set: bool,
 ) -> Result<Response, ContractError> {
     // set manager logic
-    //
-    // require only the admin for this msg. 
+
+    // require only the admin for this msg.
+    
+    // manager[to] = set;
 }
 
 fn execute_set_admin(
@@ -304,8 +337,10 @@ fn execute_set_admin(
     admin: Addr
 ) -> Result<Response, ContractError> {
     // set admin logic
-    //
+
     // require only the admin for this msg. 
+
+    // admin = _admin;
 }
 
 fn execute_set_base_uri(
@@ -315,8 +350,10 @@ fn execute_set_base_uri(
     base_uri: String,
 ) -> Result<Response, ContractError> {
     // set base_uri logic
-    //
+
     // require only the admin for this msg. 
+
+    // baseURI = _baseURI;
 }
 
 fn execute_set_mint_fee(
@@ -326,8 +363,11 @@ fn execute_set_mint_fee(
     mint_fee: u64,
 ) -> Result<Response, ContractError> {
     // set mint fee logic
-    //
+
     // require only the admin for this msg. 
+
+    // mintFee = _mintFee;
+
 }
 
 fn execute_claim_fee(
@@ -338,7 +378,7 @@ fn execute_claim_fee(
     amount: u64,
 ) -> Result<Response, ContractError> {
     // set claim fee logic
-    //
+
     // require only the admin for this msg. 
 }
 
@@ -353,9 +393,10 @@ fn execute_safe_transfer_from(
     /*data: bytes*/
 ) -> Result<Response, ContractError> {
     // safe transfer logic
-    //
+
     // validate token id is transferrable.
-    // check for permissions
+
+    // if (permissioned[id]) require(userPermissioned[from][id] && userPermissioned[to][id], "NOT_PERMITTED");
 }
 
 fn execute_safe_batch_transfer_from(

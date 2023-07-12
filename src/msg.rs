@@ -81,7 +81,7 @@ pub enum ExecuteMsg {
 
     SetManager{
         to: Addr,           // address to,
-        manager: bool       // bool set
+        set: bool           // bool set
     },
 
     SetAdmin{
