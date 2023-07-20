@@ -5,8 +5,12 @@ use crate::state::{Amounts,Ids};
 
 #[cw_serde]
 pub struct InstantiateMsg {
-
-    pub admin: Option<String>,
+    pub name: String,
+    pub symbol: String,
+    pub base_uri: String,
+    pub mint_fee: Coin,
+    pub admins_cw4_group: Option<Addr>,
+    pub managers_cw4_group: Option<Addr>,
 }
 
 #[cw_serde]

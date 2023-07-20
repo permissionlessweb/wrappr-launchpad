@@ -24,10 +24,16 @@ pub fn instantiate(
 ) -> Result<Response, ContractError> {
     set_contract_version(_deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 
-    // Instantiate Logic Here.
+    let admins_cw4_group  = deps.api.addr_validate(&msg.admins_cw4_group)?;
+    let managers_cw4_group = deps.api.addr_validate(&msg.makers_cw4_group)?;
+
+    let config = Config {
+        admins_cw4_group,
+        managers_cw4_group,
+    };
+    CONFIG.save(deps.storage, &config)?;
 
     Ok(Response::new().add_attribute("action", "instantiate"))
-
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -190,7 +196,7 @@ fn execute_burn(
 ) -> Result<Response, ContractError> {
     // burn logic
 
-    // check if the message sender is able to burn tokens. Only the owner and admin may call the burn function. 
+    // check if info.sender is owner or admin of contract.
 }
 
 fn execute_manage_mint(
@@ -206,13 +212,13 @@ fn execute_manage_mint(
 ) -> Result<Response, ContractError> {
     // manage mint logic:
 
-    // require message sender to be the owner, manager, or admin
+    // Check if info.sender is in managers_cw4_group, admins_cw4_group, or owner_of id
 
     // if the id is not registered, register it.
 
     // if there is no owner of the id, assign the owner to the id. 
-    // Check to make sure that the newly assigned owner does not equal 0.
 
+    // Check to make sure that the newly assigned owner does not equal 0.
 
 }
 
@@ -226,7 +232,11 @@ fn execute_manage_burn(
 ) -> Result<Response, ContractError> {
     // manage burn logic
 
-    // require message sender to be the owner, manager, or admin
+    // requre info.sender to be owner of id, or admin of contract
+    if info.sender !=  {
+        return Err(ContractError::Unauthorized {});
+    };
+
 }
 
 fn execute_set_owner_of(
@@ -238,7 +248,11 @@ fn execute_set_owner_of(
 ) -> Result<Response, ContractError> {
     // set owner of logic
 
-    // requre message sender to only be owner of, or admin of the id
+    // requre info.sender to be owner of id, or admin of contract
+    if info.sender !=  {
+        return Err(ContractError::Unauthorized {});
+    };
+
     
     // set the ownerOf[to]
 }
@@ -252,7 +266,11 @@ fn execute_set_transferability(
 ) -> Result<Response, ContractError> {
     // set transferability logic
 
-    // requre message sender to only be owner of, or admin of the id
+    // requre info.sender to be owner of, or admin of the id
+    if info.sender !=  {
+        return Err(ContractError::Unauthorized {});
+    };
+
 
     // set the transferable[id] 
 }
@@ -266,7 +284,11 @@ fn execute_set_permissions(
 ) -> Result<Response, ContractError> {
     // set permissions logic
 
-    // requre message sender to only be owner of, or admin.
+    // requre info.sender to be owner of, or admin of the id
+    if info.sender !=  {
+        return Err(ContractError::Unauthorized {});
+    };
+
 
     // set the permissioned[id]
 }
@@ -281,7 +303,11 @@ fn execute_set_user_permissions(
 ) -> Result<Response, ContractError> {
     // set user permissions logic
 
-    // requre message sender to only be owner of, or admin.
+    // requre info.sender to be owner of, or admin of the id
+    if info.sender !=  {
+        return Err(ContractError::Unauthorized {});
+    };
+
 
     // set a userPermissioned[to][id]
 }
@@ -296,6 +322,9 @@ fn execute_set_uri(
     // set uri logic
 
     // require message sender to only be owner of, or admin. 
+    if info.sender !=  {
+        return Err(ContractError::Unauthorized {});
+    };
 
     // uris[id] = tokenURI;
 }
@@ -310,7 +339,10 @@ fn execute_set_user_uri(
 ) -> Result<Response, ContractError> {
     // set user_uri logic
 
-    // requre message sender to only be owner of, or admin of the id.
+    // requre info.sender to be owner of, or admin of the id
+    if info.sender !=  {
+        return Err(ContractError::Unauthorized {});
+    };
 
     // userURI[to][id] = uuri;
 }
@@ -325,6 +357,7 @@ fn execute_set_manager(
     // set manager logic
 
     // require only the admin for this msg.
+    check_admin_membership(&deps, &info.sender)?;
     
     // manager[to] = set;
 }
@@ -339,6 +372,7 @@ fn execute_set_admin(
     // set admin logic
 
     // require only the admin for this msg. 
+    check_admin_membership(&deps, &info.sender)?;
 
     // admin = _admin;
 }
@@ -352,6 +386,7 @@ fn execute_set_base_uri(
     // set base_uri logic
 
     // require only the admin for this msg. 
+    check_admin_membership(&deps, &info.sender)?;
 
     // baseURI = _baseURI;
 }
@@ -365,6 +400,7 @@ fn execute_set_mint_fee(
     // set mint fee logic
 
     // require only the admin for this msg. 
+    check_admin_membership(&deps, &info.sender)?;
 
     // mintFee = _mintFee;
 
@@ -380,6 +416,8 @@ fn execute_claim_fee(
     // set claim fee logic
 
     // require only the admin for this msg. 
+    check_admin_membership(&deps, &info.sender)?;
+
 }
 
 fn execute_safe_transfer_from(
@@ -413,6 +451,24 @@ fn execute_safe_batch_transfer_from(
     // validate if each id in msg is transferrable.
     // check for permissions
 }
+
+fn check_admin_membership (deps: &DepsMut, sender: &Addr) -> Result<(), ContractError> {
+
+    let config = CONFIG.load(deps.storage)?;
+    let res: MemberResponse = deps.querier.query_wasm_smart(
+        config.admins_cw4_group,
+        &Cw4QueryMsg::Member {
+            addr: sender.to_string(),
+            at_height: None,
+        },
+    )?;
+    if res.weight.is_none() {
+        return Err(ContractError::Unauthorized {});
+    };
+
+    Ok(())
+}
+
 
 // Query Logic
 
