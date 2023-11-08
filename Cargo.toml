@@ -1,0 +1,74 @@
+[workspace]
+members = [
+    "packages/*",
+    "contracts/*",
+]
+resolver = "2"
+
+[workspace.package]
+version    = "0.1.0"
+edition    = "2021"
+homepage   = "https://wrappr.wtf"
+repository = "https://github.com/permissionlessweb/wrappr-launchpad"
+license    = "Apache-2.0"
+
+[workspace.dependencies]
+wrappr-factory         = { version = "0.1.0", path = "contracts/wrappr-factory" }
+wrappr-minter          = { version = "0.1.0", path = "contracts/wrappr-minter" }
+cw-wrappr              = { version = "0.1.0", path = "contracts/cw-wrappr" }
+cosmwasm-schema      = "1.2.1"
+cosmwasm-std         = "1.2.1"
+cw-controllers       = "1.1.0"
+cw2                  = "1.1.0"
+cw4                  = "1.1.0"
+cw4-group            = "1.1.0"
+cw721                = "0.18.0"
+cw721-base           = "0.18.0"
+cw-multi-test        = "0.16.2"
+cw-storage-plus      = "1.1.0"
+cw-utils             = "1.0.1"
+schemars             = "0.8.11"
+serde                = { version = "1.0.145", default-features = false, features = ["derive"] }
+wr2                  = { version = "0.1.0", path = "packages/wr2" }
+wr4                  = { version = "0.1.0", path = "packages/wr4" }
+wrappr-utils         = { version = "0.1.0", path = "packages/wrappr-utils" }
+thiserror            = "1.0.31"
+url                  = "2.2.2"
+sha2                 = { version = "0.10.2", default-features = false }
+semver               = "1"
+cw-ownable           = "0.5.1"
+
+[profile.release.package.wrappr-utils]
+codegen-units = 1
+incremental   = false
+
+[profile.release.package.wr2]
+codegen-units = 1
+incremental   = false
+
+[profile.release.package.wr4]
+codegen-units = 1
+incremental   = false
+
+
+
+
+
+[profile.release.package.wrappr-factory]
+codegen-units = 1
+incremental   = false
+
+[profile.release.package.wrappr-minter]
+codegen-units = 1
+incremental   = false
+
+
+
+
+[profile.release]
+rpath            = false
+lto              = true
+overflow-checks  = true
+opt-level        = 3
+debug            = false
+debug-assertions = false

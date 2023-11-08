@@ -83,7 +83,7 @@ pub struct CollectionInfo {
 }
 
 #[cw_serde]
-pub struct UpdateCollectionInfoMsg<T> {
+pub struct UpdateCollectionInfoMsg {
     pub description: Option<String>,
     pub image: Option<String>,
     pub external_link: Option<Option<String>>,
