@@ -1,22 +1,11 @@
-# Wrappr-Utils
+# Stargaze Standard Library
 
-Wrappr-utils is a cw721-compatible spec that adds on-chain contract metadata.
+Common library for Stargaze smart contracts.
 
-```rs
-pub struct CollectionInfo<T> {
-    pub creator: String,
-    pub description: String,
-    pub image: String,
-    pub external_link: Option<String>,
-    // pub trading_start_time: Option<Timestamp>,
-    // pub royalty_info: Option<T>,
-}
+## Messages
 
-// pub struct RoyaltyInfo {
-//     pub payment_address: Addr,
-//     pub share: Decimal,
-// }
+`ClaimFor{address, action}` - Claim airdrop for a given action.
 
-```
+`FundCommunityPool{amount}` - Fund the Stargaze Community Pool for a specified amount.
 
-The above is set when the contract is instantiated. The contract inherits everything else from cw721-base.
+`FundFairburnPool{amount}` - Fund the Fairburn Pool for a specified amount.

@@ -1,23 +1,17 @@
 [package]
 name        = "wrappr-utils"
-authors     = ["A Hardnett <returniflost@skiff.com>"]
-description = "Wrappr.wtf Basic NFT Interface"
-version     = { workspace = true }
+authors     = [
+    "Jorge Hernandez <jorge@publicawesome.com>",
+    "A Hardnett <returniflost@skiff.com>",
+      ]
+description = "Bindings for CosmWasm contracts to call into custom modules of Stargaze"
+version     = "0.1.0"
 edition     = { workspace = true }
 homepage    = { workspace = true }
 repository  = { workspace = true }
 license     = { workspace = true }
 
-exclude = [
-  # Those files are rust-optimizer artifacts. You might want to commit them for convenience but they should not be part of the source code publication.
-  "contract.wasm",
-  "hash.txt",
-]
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[lib]
-crate-type = ["cdylib", "rlib"]
 
 [features]
 # for more explicit tests, cargo test --features=backtraces
@@ -28,11 +22,6 @@ library = []
 [dependencies]
 cosmwasm-schema = { workspace = true }
 cosmwasm-std    = { workspace = true }
-cw721-base      = { workspace = true, features = ["library"] }
-cw-utils        = { workspace = true }
+schemars        = { workspace = true }
 serde           = { workspace = true }
 thiserror       = { workspace = true }
-cw-ownable =  "0.5.0"
-
-[dev-dependencies]
-cw-multi-test = { workspace = true }

@@ -1,7 +1,9 @@
 [workspace]
 members = [
     "packages/*",
-    "contracts/*",
+    "contracts/collections/*",
+    "contracts/factories/*",
+    "contracts/minters/*",
 ]
 resolver = "2"
 
@@ -13,9 +15,8 @@ repository = "https://github.com/permissionlessweb/wrappr-launchpad"
 license    = "Apache-2.0"
 
 [workspace.dependencies]
-wrappr-factory         = { version = "0.1.0", path = "contracts/wrappr-factory" }
-wrappr-minter          = { version = "0.1.0", path = "contracts/wrappr-minter" }
-cw-wrappr              = { version = "0.1.0", path = "contracts/cw-wrappr" }
+wrappr-factory         = { version = "0.1.0", path = "contracts/factories/wrappr-factory" }
+wrappr-minter          = { version = "0.1.0", path = "contracts/minters/wrappr-minter" }
 cosmwasm-schema      = "1.2.1"
 cosmwasm-std         = "1.2.1"
 cw-controllers       = "1.1.0"
@@ -29,8 +30,11 @@ cw-storage-plus      = "1.1.0"
 cw-utils             = "1.0.1"
 schemars             = "0.8.11"
 serde                = { version = "1.0.145", default-features = false, features = ["derive"] }
-wr2                  = { version = "0.1.0", path = "packages/wr2" }
-wr4                  = { version = "0.1.0", path = "packages/wr4" }
+wrappr-fee           = { version = "0.1.0", path = "packages/wrappr-fee" }
+wrappr-factory-utils    = { version = "0.1.0", path = "packages/wrappr-factory-utils" }
+wrappr-minter-utils  = { version = "0.1.0", path = "packages/wrappr-minter-utils" }
+wrappr721            = { version = "0.1.0", path = "packages/wrappr721" }
+wrappr721-base       = { version = "0.1.0", path = "contracts/collections/wrappr721-base" }
 wrappr-utils         = { version = "0.1.0", path = "packages/wrappr-utils" }
 thiserror            = "1.0.31"
 url                  = "2.2.2"
@@ -38,20 +42,25 @@ sha2                 = { version = "0.10.2", default-features = false }
 semver               = "1"
 cw-ownable           = "0.5.1"
 
-[profile.release.package.wrappr-utils]
+[profile.release.package.wrappr721]
 codegen-units = 1
 incremental   = false
 
-[profile.release.package.wr2]
+[profile.release.package.wrappr-fee]
 codegen-units = 1
 incremental   = false
 
-[profile.release.package.wr4]
+[profile.release.package.wrappr-factory-utils]
 codegen-units = 1
 incremental   = false
 
+[profile.release.package.wrappr-minter-utils]
+codegen-units = 1
+incremental   = false
 
-
+[profile.release.package.wrappr721-base]
+codegen-units = 1
+incremental   = false
 
 
 [profile.release.package.wrappr-factory]
@@ -61,8 +70,6 @@ incremental   = false
 [profile.release.package.wrappr-minter]
 codegen-units = 1
 incremental   = false
-
-
 
 
 [profile.release]
