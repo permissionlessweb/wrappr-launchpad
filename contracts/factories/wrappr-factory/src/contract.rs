@@ -7,7 +7,7 @@ use cw2::set_contract_version;
 use cw_utils::must_pay;
 use wrappr_fee::checked_fair_burn;
 use wrappr_factory_utils::msg::UpdateMinterParamsMsg;
-use wrappr_factory_utils::query::{AllowedWrappr721CodeIdResponse, AllowedWrappr721CodeIdsResponse, WrapprFactoryUtilsQueryMsg};
+use wrappr_factory_utils::query::{AllowedWrappr721CodeIdResponse, AllowedWrappr721CodeIdsResponse, WrapprFactoryQueryMsg};
 use wrappr_factory_utils::MinterParams;
 use wrappr_utils::{Response, NATIVE_DENOM};
 
@@ -176,21 +176,21 @@ pub fn update_params<T, C>(
 
     params.mint_fee_bps = param_msg.mint_fee_bps.unwrap_or(params.mint_fee_bps);
 
-    params.max_trading_offset_secs = param_msg
-        .max_trading_offset_secs
-        .unwrap_or(params.max_trading_offset_secs);
+    // params.max_trading_offset_secs = param_msg
+    //     .max_trading_offset_secs
+    //     .unwrap_or(params.max_trading_offset_secs);
 
     Ok(())
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(deps: Deps, _env: Env, msg: WrapprFactoryUtilsQueryMsg) -> StdResult<Binary> {
+pub fn query(deps: Deps, _env: Env, msg: WrapprFactoryQueryMsg) -> StdResult<Binary> {
     match msg {
-        WrapprFactoryUtilsQueryMsg::Params {} => to_json_binary(&query_params(deps)?),
-        WrapprFactoryUtilsQueryMsg::AllowedWrappr721CodeIds {} => {
+        WrapprFactoryQueryMsg::Params {} => to_json_binary(&query_params(deps)?),
+        WrapprFactoryQueryMsg::AllowedWrappr721CodeIds {} => {
             to_json_binary(&query_allowed_collection_code_ids(deps)?)
         }
-        WrapprFactoryUtilsQueryMsg::AllowedWrappr721CodeId(code_id) => {
+        WrapprFactoryQueryMsg::AllowedWrappr721CodeId(code_id) => {
             to_json_binary(&query_allowed_collection_code_id(deps, code_id)?)
         }
     }

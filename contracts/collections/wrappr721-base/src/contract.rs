@@ -374,8 +374,8 @@ where
             description: info.description,
             image: info.image,
             external_link: info.external_link,
-            // explicit_content: info.explicit_content,
-            // start_trading_time: info.start_trading_time,
+            jurisdiction: info.jurisdiction,
+            entity: info.entity,
             royalty_info: royalty_info_res,
         })
     }

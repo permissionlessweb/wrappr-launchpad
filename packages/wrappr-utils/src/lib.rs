@@ -4,8 +4,8 @@ mod route;
 
 pub const NATIVE_DENOM: &str = "ujuno";
 
-pub const JURISDICTION: &'static [&'static str] = &["Deleware", "Marshall-Island", "Wyoming"];
-pub const ENTITY: &'static [&'static str] = &["LLC", "Non-Profit",];
+pub const JURISDICTION: &str = "deleware"; 
+pub const ENTITY: &str = "llc"; 
 
 // 3/11/2022 16:00:00 ET
 pub const GENESIS_MINT_START_TIME: u64 = 1647032400000000000;

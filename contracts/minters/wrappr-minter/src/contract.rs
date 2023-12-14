@@ -12,14 +12,14 @@ use cosmwasm_std::{
 use cw2::set_contract_version;
 use cw_utils::{must_pay, parse_reply_instantiate_data};
 use wrappr_fee::checked_fair_burn;
-use wrappr_factory_utils::query::WrapprFactoryUtilsQueryMsg;
+use wrappr_factory_utils::query::WrapprFactoryQueryMsg;
 use wrappr_minter_utils::{QueryMsg, Status, StatusResponse, SudoMsg};
-use wrappr721::{ExecuteMsg as Sg721ExecuteMsg, InstantiateMsg as Sg721InstantiateMsg};
-use wrappr721_base::msg::{CollectionInfoResponse, QueryMsg as Sg721QueryMsg};
-use wrappr_utils::{Response, SubMsg, NATIVE_DENOM};
+use wrappr721::{ExecuteMsg as Wrappr721ExecuteMsg, InstantiateMsg as Sg721InstantiateMsg};
+use wrappr721_base::msg::{CollectionInfoResponse, QueryMsg as Wrappr721QueryMsg};
+use wrappr_utils::{Response, SubMsg, NATIVE_DENOM, JURISDICTION, ENTITY};
 use url::Url;
 
-const CONTRACT_NAME: &str = "crates.io:sg-wrappr-minter";
+const CONTRACT_NAME: &str = "crates.io:wrappr-minter";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 const INSTANTIATE_SG721_REPLY_ID: u64 = 1;
 
@@ -32,6 +32,7 @@ pub fn instantiate(
 ) -> Result<Response, ContractError> {
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 
+    // provide the wrappr-factory params to this new contract
     let factory = info.sender.clone();
 
     // set default status so it can be queried without failing
@@ -41,12 +42,14 @@ pub fn instantiate(
     // This will fail if the sender cannot parse a response from the factory contract
     let factory_params: ParamsResponse = deps
         .querier
-        .query_wasm_smart(factory.clone(), &WrapprFactoryUtilsQueryMsg::Params {})?;
+        .query_wasm_smart(factory.clone(), &WrapprFactoryQueryMsg::Params {})?;
 
     let config = Config {
         factory: factory.clone(),
         collection_code_id: msg.collection_params.code_id,
         // assume the mint price is the minimum mint price
+        jurisdiction: JURISDICTION.to_string(),
+        entity: ENTITY.to_string(),
         // 100% is fair burned
         mint_price: factory_params.params.min_mint_price,
         extension: Empty {},
@@ -119,10 +122,9 @@ pub fn execute_mint_sender(
     let collection_address = COLLECTION_ADDRESS.load(deps.storage)?;
 
     // This is a 1:1 minter, minted at min_mint_price
-    // Should mint and then list on the marketplace for secondary sales
     let collection_info: CollectionInfoResponse = deps.querier.query_wasm_smart(
         collection_address.clone(),
-        &Sg721QueryMsg::CollectionInfo {},
+        &Wrappr721QueryMsg::CollectionInfo {},
     )?;
     // allow only wrappr721 creator address to mint
     if collection_info.creator != info.sender {
@@ -140,7 +142,7 @@ pub fn execute_mint_sender(
 
     let factory: ParamsResponse = deps
         .querier
-        .query_wasm_smart(config.factory, &WrapprFactoryUtilsQueryMsg::Params {})?;
+        .query_wasm_smart(config.factory, &WrapprFactoryQueryMsg::Params {})?;
     let factory_params = factory.params;
 
     let funds_sent = must_pay(&info, NATIVE_DENOM)?;
@@ -155,7 +157,7 @@ pub fn execute_mint_sender(
     checked_fair_burn(&info, network_fee.u128(), None, &mut res)?;
 
     // Create mint msgs
-    let mint_msg = Sg721ExecuteMsg::<Extension, Empty>::Mint {
+    let mint_msg = Wrappr721ExecuteMsg::<Extension, Empty>::Mint {
         token_id: increment_token_index(deps.storage)?.to_string(),
         owner: info.sender.to_string(),
         token_uri: Some(token_uri.clone()),
@@ -186,7 +188,7 @@ pub fn execute_mint_sender(
 
 //     let collection_info: CollectionInfoResponse = deps.querier.query_wasm_smart(
 //         wrappr721_contract_addr.clone(),
-//         &Sg721QueryMsg::CollectionInfo {},
+//         &Wrappr721QueryMsg::CollectionInfo {},
 //     )?;
 //     if info.sender != collection_info.creator {
 //         return Err(ContractError::Unauthorized(
@@ -207,7 +209,7 @@ pub fn execute_mint_sender(
 //     // execute wrappr721 contract
 //     let msg = WasmMsg::Execute {
 //         contract_addr: wrappr721_contract_addr.to_string(),
-//         msg: to_json_binary(&Sg721ExecuteMsg::<Extension, Empty>::UpdateStartTradingTime(start_time))?,
+//         msg: to_json_binary(&Wrappr721ExecuteMsg::<Extension, Empty>::UpdateStartTradingTime(start_time))?,
 //         funds: vec![],
 //     };
 
@@ -222,9 +224,7 @@ pub fn sudo(deps: DepsMut, _env: Env, msg: SudoMsg) -> Result<Response, Contract
     match msg {
         SudoMsg::UpdateStatus {
             is_verified,
-            jurisdiction,
-            entity,
-        } => update_status(deps, is_verified, jurisdiction, entity) // is_blocked, is_explicit)
+        } => update_status(deps, is_verified) // is_blocked, is_explicit)
             .map_err(|_| ContractError::UpdateStatus {}),
     }
 }
@@ -233,13 +233,9 @@ pub fn sudo(deps: DepsMut, _env: Env, msg: SudoMsg) -> Result<Response, Contract
 pub fn update_status(
     deps: DepsMut,
     is_verified: bool,
-    jurisdiction: String,
-    entity: String,
 ) -> StdResult<Response> {
     let mut status = STATUS.load(deps.storage)?;
     status.is_verified = is_verified;
-    status.jurisdiction = jurisdiction;
-    status.entity = entity;
     STATUS.save(deps.storage, &status)?;
 
     Ok(Response::new().add_attribute("action", "sudo_update_status"))

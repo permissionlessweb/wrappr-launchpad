@@ -4,9 +4,9 @@ TEST_ADDRS ?= $(shell jq -r '.[].address' ./e2e/configs/test_accounts.json | tr 
 GAS_LIMIT ?= "75000000"
 
 # deploy-local:
-# 	docker kill stargaze || true
-# 	docker volume rm -f stargaze_data
-# 	docker run --rm -d --name stargaze \
+# 	docker kill juno || true
+# 	docker volume rm -f juno_data
+# 	docker run --rm -d --name juno \
 # 		-e DENOM=ustars \
 # 		-e CHAINID=testing \
 # 		-e GAS_LIMIT=$(GAS_LIMIT) \
@@ -14,8 +14,8 @@ GAS_LIMIT ?= "75000000"
 # 		-p 26656:26656 \
 # 		-p 26657:26657 \
 # 		-p 9090:9090 \
-# 		--mount type=volume,source=stargaze_data,target=/root \
-# 		publicawesome/stargaze:8.0.0 /data/entry-point.sh $(TEST_ADDRS)
+# 		--mount type=volume,source=juno_data,target=/root \
+# 		junonetwork/juno /data/entry-point.sh $(TEST_ADDRS)
 
 # e2etest:
 # 	RUST_LOG=info CONFIG=configs/cosm-orc.yaml cargo integration-test $(TEST_NAME)

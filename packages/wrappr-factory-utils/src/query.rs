@@ -4,7 +4,7 @@ use crate::CodeId;
 use crate::MinterParams;
 
 #[cw_serde]
-pub enum WrapprFactoryUtilsQueryMsg {
+pub enum WrapprFactoryQueryMsg {
     /// Returns `ParamsResponse`
     Params {},
     AllowedWrappr721CodeIds {},

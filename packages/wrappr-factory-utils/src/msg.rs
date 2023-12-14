@@ -15,6 +15,8 @@ pub struct CollectionParams {
     pub code_id: u64,
     pub name: String,
     pub symbol: String,
+    pub jurisdiction: String,
+    pub entity: String,
     pub info: CollectionInfo<RoyaltyInfoResponse>,
 }
 
