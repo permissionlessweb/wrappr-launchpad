@@ -1,6 +1,6 @@
 use crate::state::Extension;
 use cosmwasm_schema::cw_serde;
-use wrappr_factory_utils::msg::{CreateMinterMsg, Sg2ExecuteMsg, UpdateMinterParamsMsg};
+use wrappr_factory_utils::msg::{CreateMinterMsg, WrapprFactoryExecuteMsg, UpdateMinterParamsMsg};
 
 use crate::state::BaseMinterParams;
 
@@ -11,7 +11,7 @@ pub struct InstantiateMsg {
 
 pub type BaseMinterCreateMsg = CreateMinterMsg<Extension>;
 
-pub type ExecuteMsg = Sg2ExecuteMsg<Extension>;
+pub type ExecuteMsg = WrapprFactoryExecuteMsg<Extension>;
 
 pub type BaseUpdateParamsMsg = UpdateMinterParamsMsg<Extension>;
 

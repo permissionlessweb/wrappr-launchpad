@@ -12,7 +12,7 @@ use cosmwasm_std::{
 use cw2::set_contract_version;
 use cw_utils::{must_pay, parse_reply_instantiate_data};
 use wrappr_fee::checked_fair_burn;
-use wrappr_factory_utils::query::Sg2QueryMsg;
+use wrappr_factory_utils::query::WrapprFactoryUtilsQueryMsg;
 use wrappr_minter_utils::{QueryMsg, Status, StatusResponse, SudoMsg};
 use wrappr721::{ExecuteMsg as Sg721ExecuteMsg, InstantiateMsg as Sg721InstantiateMsg};
 use wrappr721_base::msg::{CollectionInfoResponse, QueryMsg as Sg721QueryMsg};
@@ -41,7 +41,7 @@ pub fn instantiate(
     // This will fail if the sender cannot parse a response from the factory contract
     let factory_params: ParamsResponse = deps
         .querier
-        .query_wasm_smart(factory.clone(), &Sg2QueryMsg::Params {})?;
+        .query_wasm_smart(factory.clone(), &WrapprFactoryUtilsQueryMsg::Params {})?;
 
     let config = Config {
         factory: factory.clone(),
@@ -53,14 +53,15 @@ pub fn instantiate(
     };
 
     // Use default start trading time if not provided
-    let collection_info = msg.collection_params.info.clone();
+    let mut collection_info = msg.collection_params.info.clone();
     // let offset = factory_params.params.max_trading_offset_secs;
-    // let start_trading_time = msg
-    //     .collection_params
-    //     .info
-    //     .start_trading_time
-    //     .or_else(|| Some(env.block.time.plus_seconds(offset)));
-    // collection_info.start_trading_time = start_trading_time;
+
+    // instantitate minter with the available jurisdictions & entities
+    let jurisdiction = factory_params.params.jurisdiction;
+    let entity =  factory_params.params.entity;
+
+    collection_info.jurisdiction = jurisdiction;
+    collection_info.entity = entity;
 
     CONFIG.save(deps.storage, &config)?;
 
@@ -139,7 +140,7 @@ pub fn execute_mint_sender(
 
     let factory: ParamsResponse = deps
         .querier
-        .query_wasm_smart(config.factory, &Sg2QueryMsg::Params {})?;
+        .query_wasm_smart(config.factory, &WrapprFactoryUtilsQueryMsg::Params {})?;
     let factory_params = factory.params;
 
     let funds_sent = must_pay(&info, NATIVE_DENOM)?;
@@ -221,9 +222,9 @@ pub fn sudo(deps: DepsMut, _env: Env, msg: SudoMsg) -> Result<Response, Contract
     match msg {
         SudoMsg::UpdateStatus {
             is_verified,
-            is_blocked,
-            is_explicit,
-        } => update_status(deps, is_verified, is_blocked, is_explicit)
+            jurisdiction,
+            entity,
+        } => update_status(deps, is_verified, jurisdiction, entity) // is_blocked, is_explicit)
             .map_err(|_| ContractError::UpdateStatus {}),
     }
 }
@@ -232,13 +233,13 @@ pub fn sudo(deps: DepsMut, _env: Env, msg: SudoMsg) -> Result<Response, Contract
 pub fn update_status(
     deps: DepsMut,
     is_verified: bool,
-    is_blocked: bool,
-    is_explicit: bool,
+    jurisdiction: String,
+    entity: String,
 ) -> StdResult<Response> {
     let mut status = STATUS.load(deps.storage)?;
     status.is_verified = is_verified;
-    status.is_blocked = is_blocked;
-    status.is_explicit = is_explicit;
+    status.jurisdiction = jurisdiction;
+    status.entity = entity;
     STATUS.save(deps.storage, &status)?;
 
     Ok(Response::new().add_attribute("action", "sudo_update_status"))

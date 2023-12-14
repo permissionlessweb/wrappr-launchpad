@@ -12,12 +12,12 @@ pub fn mock_collection_params() -> CollectionParams {
             description: String::from("Flower Flamingos"),
             image: "https://example.com/image.png".to_string(),
             external_link: Some("https://example.com/external.html".to_string()),
-            // start_trading_time: None,
-            // explicit_content: Some(false),
             royalty_info: Some(RoyaltyInfoResponse {
                 payment_address: "creator".to_string(),
                 share: Decimal::percent(10),
             }),
+            jurisdiction: String::from("Mars"),
+            entity: String:: from("Red Rock"),
         },
     }
 }
@@ -32,12 +32,13 @@ pub fn mock_collection_params_1() -> CollectionParams {
             description: String::from("Flower Flamingos"),
             image: "https://example.com/image.png".to_string(),
             external_link: Some("https://example.com/external.html".to_string()),
-            // start_trading_time,
-            // explicit_content: Some(false),
+            jurisdiction: String::from("Moon"),
+            entity: String:: from("Dusty LLC"),
             royalty_info: Some(RoyaltyInfoResponse {
                 payment_address: "creator".to_string(),
                 share: Decimal::percent(10),
             }),
+            
         },
     }
 }
@@ -56,8 +57,8 @@ pub fn mock_curator_payment_address() -> CollectionParams {
                 payment_address: "curator".to_string(),
                 share: Decimal::percent(10),
             }),
-            // start_trading_time,
-            // explicit_content: None,
+            jurisdiction: String::from("Mars"),
+            entity: String:: from("Red Rock Specialist Certificate"),
         },
     }
 }
@@ -78,8 +79,8 @@ pub fn mock_collection_params_high_fee() -> CollectionParams {
                 payment_address: "creator".to_string(),
                 share: Decimal::percent(100),
             }),
-            // start_trading_time,
-            // explicit_content: None,
+            jurisdiction: String::from("Jupiter"),
+            entity: String:: from("Big Gas Non-Profit Cooperation"),
         },
     }
 }
@@ -100,8 +101,8 @@ pub fn mock_collection_two() -> CollectionParams {
                 payment_address: "creator".to_string(),
                 share: Decimal::percent(10),
             }),
-            // start_trading_time,
-            // explicit_content: None,
+            jurisdiction: String::from("Pluto"),
+            entity: String:: from("Independent"),
         },
     }
 }

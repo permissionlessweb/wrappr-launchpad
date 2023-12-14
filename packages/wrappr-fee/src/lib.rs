@@ -1,11 +1,12 @@
 use cosmwasm_std::{coin, coins, Addr, BankMsg, Coin, Decimal, Event, MessageInfo, Uint128};
 use cw_utils::{may_pay, PaymentError};
-use wrappr_utils::{create_fund_fairburn_pool_msg, Response, SubMsg, NATIVE_DENOM};
+use wrappr_utils::{ Response, SubMsg, NATIVE_DENOM, create_fund_community_pool_msg};
 use thiserror::Error;
 
 // governance parameters
 const FEE_BURN_PERCENT: u64 = 50;
-const FOUNDATION: &str = "stars1xqz6xujjyz0r9uzn7srasle5uynmpa0zkjr5l8";
+// TODO: Set as Wrappr-DAO
+const FOUNDATION: &str = "juno1q2lwlsfawx5kyc8et26g9u3834g0qj0svrlpzn66nmzzmml66zastepvq4";
 
 /// Burn and distribute fees and return an error if the fee is not enough
 pub fn checked_fair_burn(
@@ -93,7 +94,7 @@ pub fn fair_burn(fee: u128, developer: Option<Addr>, res: &mut Response) {
         event = event.add_attribute("dev_amount", Uint128::from(remainder).to_string());
     } else {
         res.messages
-            .push(SubMsg::new(create_fund_fairburn_pool_msg(coins(
+            .push(SubMsg::new(create_fund_community_pool_msg(coins(
                 remainder,
                 NATIVE_DENOM,
             ))));
@@ -115,7 +116,7 @@ pub enum FeeError {
 #[cfg(test)]
 mod tests {
     use cosmwasm_std::{coins, Addr, BankMsg};
-    use wrappr_utils::{create_fund_fairburn_pool_msg, Response, NATIVE_DENOM};
+    use wrappr_utils::{create_fund_community_pool_msg, Response, NATIVE_DENOM};
 
     use crate::{fair_burn, SubMsg};
 
@@ -125,9 +126,9 @@ mod tests {
 
         fair_burn(9u128, None, &mut res);
         let burn_msg = SubMsg::new(BankMsg::Burn {
-            amount: coins(4, "ustars".to_string()),
+            amount: coins(4, "ujuno".to_string()),
         });
-        let dist_msg = SubMsg::new(create_fund_fairburn_pool_msg(coins(5, NATIVE_DENOM)));
+        let dist_msg = SubMsg::new(create_fund_community_pool_msg(coins(5, NATIVE_DENOM)));
         assert_eq!(res.messages.len(), 2);
         assert_eq!(res.messages[0], burn_msg);
         assert_eq!(res.messages[1], dist_msg);
@@ -137,9 +138,9 @@ mod tests {
     fn check_fair_burn_with_dev_rewards() {
         let mut res = Response::new();
 
-        fair_burn(9u128, Some(Addr::unchecked("geordi")), &mut res);
+        fair_burn(9u128, Some(Addr::unchecked("skeret")), &mut res);
         let bank_msg = SubMsg::new(BankMsg::Send {
-            to_address: "geordi".to_string(),
+            to_address: "eret".to_string(),
             amount: coins(5, NATIVE_DENOM),
         });
         let burn_msg = SubMsg::new(BankMsg::Burn {
@@ -154,9 +155,9 @@ mod tests {
     fn check_fair_burn_with_dev_rewards_different_amount() {
         let mut res = Response::new();
 
-        fair_burn(1420u128, Some(Addr::unchecked("geordi")), &mut res);
+        fair_burn(1420u128, Some(Addr::unchecked("jeret")), &mut res);
         let bank_msg = SubMsg::new(BankMsg::Send {
-            to_address: "geordi".to_string(),
+            to_address: "bleret".to_string(),
             amount: coins(710, NATIVE_DENOM),
         });
         let burn_msg = SubMsg::new(BankMsg::Burn {

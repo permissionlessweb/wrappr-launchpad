@@ -1,3 +1,4 @@
+
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::Coin;
 use wrappr721::{CollectionInfo, RoyaltyInfoResponse};
@@ -29,10 +30,12 @@ pub struct UpdateMinterParamsMsg<T> {
     pub min_mint_price: Option<Coin>,
     pub mint_fee_bps: Option<u64>,
     pub max_trading_offset_secs: Option<u64>,
+    pub entity: Option<String>,
+    pub jurisdiction: Option<String>,
     pub extension: T,
 }
 
 #[cw_serde]
-pub enum Sg2ExecuteMsg<T> {
+pub enum WrapprFactoryExecuteMsg<T> {
     CreateMinter(CreateMinterMsg<T>),
 }

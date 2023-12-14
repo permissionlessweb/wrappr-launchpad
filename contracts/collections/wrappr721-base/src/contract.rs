@@ -3,7 +3,7 @@ use url::Url;
 
 use cosmwasm_std::{
     to_json_binary, Addr, Binary, ContractInfoResponse, Decimal, Deps, DepsMut, Empty, Env, Event,
-    MessageInfo, StdError, StdResult, Storage, Timestamp, WasmQuery,
+    MessageInfo, StdError, StdResult, Storage, WasmQuery,
 };
 
 use cw721::{ContractInfoResponse as CW721ContractInfoResponse, Cw721Execute};
@@ -17,7 +17,7 @@ use wrappr721::{
 use wrappr_utils::Response;
 
 use crate::msg::{CollectionInfoResponse, NftParams, QueryMsg};
-use crate::{ContractError, Sg721Contract};
+use crate::{ContractError, Wrappr721Contract};
 
 use crate::entry::{CONTRACT_NAME, CONTRACT_VERSION};
 
@@ -25,7 +25,7 @@ const MAX_DESCRIPTION_LENGTH: u32 = 512;
 const MAX_SHARE_DELTA_PCT: u64 = 2;
 const MAX_ROYALTY_SHARE_PCT: u64 = 10;
 
-impl<'a, T> Sg721Contract<'a, T>
+impl<'a, T> Wrappr721Contract<'a, T>
 where
     T: Serialize + DeserializeOwned + Clone,
 {
@@ -83,8 +83,8 @@ where
             description: msg.collection_info.description,
             image: msg.collection_info.image,
             external_link: msg.collection_info.external_link,
-            // explicit_content: msg.collection_info.explicit_content,
-            // start_trading_time: msg.collection_info.start_trading_time,
+            jurisdiction: msg.collection_info.jurisdiction,
+            entity: msg.collection_info.entity,
             royalty_info,
         };
 
@@ -227,6 +227,7 @@ where
         }
 
         // collection.explicit_content = collection_msg.explicit_content;
+        // TODO: update jurisdiction & entity ?
 
         if let Some(Some(new_royalty_info_response)) = collection_msg.royalty_info {
             let last_royalty_update = self.royalty_updated_at.load(deps.storage)?;
@@ -273,21 +274,21 @@ where
 
     /// Called by the minter reply handler after custom validations on trading start time.
     /// Minter has start_time, default offset, makes sense to execute from minter.
-    pub fn update_start_trading_time(
-        &self,
-        deps: DepsMut,
-        _env: Env,
-        info: MessageInfo,
-    ) -> Result<Response, ContractError> {
-        assert_minter_owner(deps.storage, &info.sender)?;
+    // pub fn update_start_trading_time(
+    //     &self,
+    //     deps: DepsMut,
+    //     _env: Env,
+    //     info: MessageInfo,
+    // ) -> Result<Response, ContractError> {
+    //     assert_minter_owner(deps.storage, &info.sender)?;
 
-        let mut collection_info = self.collection_info.load(deps.storage)?;
-        // collection_info.start_trading_time = start_time;
-        self.collection_info.save(deps.storage, &collection_info)?;
+    //     let mut collection_info = self.collection_info.load(deps.storage)?;
+    //     // collection_info.start_trading_time = start_time;
+    //     self.collection_info.save(deps.storage, &collection_info)?;
 
-        let event = Event::new("update_start_trading_time").add_attribute("sender", info.sender);
-        Ok(Response::new().add_event(event))
-    }
+    //     let event = Event::new("update_start_trading_time").add_attribute("sender", info.sender);
+    //     Ok(Response::new().add_event(event))
+    // }
 
     pub fn freeze_collection_info(
         &self,
@@ -394,15 +395,15 @@ where
 
         let mut response = Response::new();
 
-        #[allow(clippy::cmp_owned)]
-        if prev_contract_version.version < "3.0.0".to_string() {
-            response = crate::upgrades::v3_0_0::upgrade(deps.branch(), &env, response)?;
-        }
+        // #[allow(clippy::cmp_owned)]
+        // if prev_contract_version.version < "3.0.0".to_string() {
+        //     response = crate::upgrades::v3_0_0::upgrade(deps.branch(), &env, response)?;
+        // }
 
-        #[allow(clippy::cmp_owned)]
-        if prev_contract_version.version < "3.1.0".to_string() {
-            response = crate::upgrades::v3_1_0::upgrade(deps.branch(), &env, response)?;
-        }
+        // #[allow(clippy::cmp_owned)]
+        // if prev_contract_version.version < "3.1.0".to_string() {
+        //     response = crate::upgrades::v3_1_0::upgrade(deps.branch(), &env, response)?;
+        // }
 
         cw2::set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 

@@ -18,5 +18,7 @@ pub struct MinterParams<T> {
     pub min_mint_price: Coin,
     pub mint_fee_bps: u64,
     pub max_trading_offset_secs: u64,
+    pub entity: String,
+    pub jurisdiction: String,
     pub extension: T,
 }

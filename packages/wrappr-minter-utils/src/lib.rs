@@ -20,8 +20,8 @@ pub struct MinterConfigResponse<T> {
 #[derive(Default)]
 pub struct Status {
     pub is_verified: bool,
-    pub is_blocked: bool,
-    pub is_explicit: bool,
+    pub jurisdiction: String,
+    pub entity: String,
 }
 
 #[cw_serde]
@@ -41,7 +41,7 @@ pub enum QueryMsg {
 pub enum SudoMsg {
     UpdateStatus {
         is_verified: bool,
-        is_blocked: bool,
-        is_explicit: bool,
+        jurisdiction: String,
+        entity: String,
     },
 }

@@ -7,7 +7,7 @@ use cw2::set_contract_version;
 use cw_utils::must_pay;
 use wrappr_fee::checked_fair_burn;
 use wrappr_factory_utils::msg::UpdateMinterParamsMsg;
-use wrappr_factory_utils::query::{AllowedCollectionCodeIdResponse, AllowedCollectionCodeIdsResponse, Sg2QueryMsg};
+use wrappr_factory_utils::query::{AllowedWrappr721CodeIdResponse, AllowedWrappr721CodeIdsResponse, WrapprFactoryUtilsQueryMsg};
 use wrappr_factory_utils::MinterParams;
 use wrappr_utils::{Response, NATIVE_DENOM};
 
@@ -63,6 +63,8 @@ pub fn execute_create_minter(
 
     let mut res = Response::new();
     checked_fair_burn(&info, params.creation_fee.amount.u128(), None, &mut res)?;
+
+    //TODO: check_wrappr_entity(); 
 
     let msg = WasmMsg::Instantiate {
         admin: Some(info.sender.to_string()),
@@ -182,13 +184,13 @@ pub fn update_params<T, C>(
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(deps: Deps, _env: Env, msg: Sg2QueryMsg) -> StdResult<Binary> {
+pub fn query(deps: Deps, _env: Env, msg: WrapprFactoryUtilsQueryMsg) -> StdResult<Binary> {
     match msg {
-        Sg2QueryMsg::Params {} => to_json_binary(&query_params(deps)?),
-        Sg2QueryMsg::AllowedCollectionCodeIds {} => {
+        WrapprFactoryUtilsQueryMsg::Params {} => to_json_binary(&query_params(deps)?),
+        WrapprFactoryUtilsQueryMsg::AllowedWrappr721CodeIds {} => {
             to_json_binary(&query_allowed_collection_code_ids(deps)?)
         }
-        Sg2QueryMsg::AllowedCollectionCodeId(code_id) => {
+        WrapprFactoryUtilsQueryMsg::AllowedWrappr721CodeId(code_id) => {
             to_json_binary(&query_allowed_collection_code_id(deps, code_id)?)
         }
     }
@@ -199,18 +201,18 @@ fn query_params(deps: Deps) -> StdResult<ParamsResponse> {
     Ok(ParamsResponse { params })
 }
 
-fn query_allowed_collection_code_ids(deps: Deps) -> StdResult<AllowedCollectionCodeIdsResponse> {
+fn query_allowed_collection_code_ids(deps: Deps) -> StdResult<AllowedWrappr721CodeIdsResponse> {
     let params = SUDO_PARAMS.load(deps.storage)?;
     let code_ids = params.allowed_wrappr721_code_ids;
-    Ok(AllowedCollectionCodeIdsResponse { code_ids })
+    Ok(AllowedWrappr721CodeIdsResponse { code_ids })
 }
 
 fn query_allowed_collection_code_id(
     deps: Deps,
     code_id: u64,
-) -> StdResult<AllowedCollectionCodeIdResponse> {
+) -> StdResult<AllowedWrappr721CodeIdResponse> {
     let params = SUDO_PARAMS.load(deps.storage)?;
     let code_ids = params.allowed_wrappr721_code_ids;
     let allowed = code_ids.contains(&code_id);
-    Ok(AllowedCollectionCodeIdResponse { allowed })
+    Ok(AllowedWrappr721CodeIdResponse { allowed })
 }
