@@ -14,7 +14,7 @@ use cw_utils::{must_pay, parse_reply_instantiate_data};
 use wrappr_fee::checked_fair_burn;
 use wrappr_factory_utils::query::WrapprFactoryQueryMsg;
 use wrappr_minter_utils::{QueryMsg, Status, StatusResponse, SudoMsg};
-use wrappr721::{ExecuteMsg as Wrappr721ExecuteMsg, InstantiateMsg as Sg721InstantiateMsg};
+use wrappr721::{ExecuteMsg as Wrappr721ExecuteMsg, InstantiateMsg as Wrappr721InstantiateMsg};
 use wrappr721_base::msg::{CollectionInfoResponse, QueryMsg as Wrappr721QueryMsg};
 use wrappr_utils::{Response, SubMsg, NATIVE_DENOM, JURISDICTION, ENTITY};
 use url::Url;
@@ -70,7 +70,7 @@ pub fn instantiate(
 
     let wasm_msg = WasmMsg::Instantiate {
         code_id: msg.collection_params.code_id,
-        msg: to_json_binary(&Sg721InstantiateMsg {
+        msg: to_json_binary(&Wrappr721InstantiateMsg {
             name: msg.collection_params.name.clone(),
             symbol: msg.collection_params.symbol,
             minter: env.contract.address.to_string(),
@@ -83,7 +83,7 @@ pub fn instantiate(
                 .to_string(),
         ),
         label: format!(
-            "SG721-{}-{}",
+            "WRAPPR721-{}-{}",
             msg.collection_params.code_id,
             msg.collection_params.name.trim()
         ),
