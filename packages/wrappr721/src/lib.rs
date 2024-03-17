@@ -81,8 +81,6 @@ pub struct CollectionInfo {
     pub description: String,
     pub image: String,
     pub external_link: Option<String>,
-    pub explicit_content: Option<bool>,
-    pub start_trading_time: Option<Timestamp>,
 }
 
 #[cw_serde]
@@ -90,7 +88,6 @@ pub struct UpdateCollectionInfoMsg<> {
     pub description: Option<String>,
     pub image: Option<String>,
     pub external_link: Option<Option<String>>,
-    pub explicit_content: Option<bool>,
     pub creator: Option<String>,
 }
 

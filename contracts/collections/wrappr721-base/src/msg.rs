@@ -198,8 +198,6 @@ pub struct CollectionInfoResponse {
     pub description: String,
     pub image: String,
     pub external_link: Option<String>,
-    pub explicit_content: Option<bool>,
-    pub start_trading_time: Option<Timestamp>,
 }
 
 impl CollectionInfoResponse {}

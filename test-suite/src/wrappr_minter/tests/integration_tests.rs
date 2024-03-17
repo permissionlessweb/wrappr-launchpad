@@ -229,10 +229,4 @@ fn update_start_trading_time() {
 
     assert!(res.is_ok());
 
-    // confirm trading start time
-    let res: CollectionInfoResponse = router
-        .wrap()
-        .query_wasm_smart(collection_addr, &Wrappr721QueryMsg::CollectionInfo {})
-        .unwrap();
-    assert_eq!(res.start_trading_time, Some(default_start_trading_time));
 }

@@ -150,8 +150,6 @@ mod tests {
                     description: "description".to_string(),
                     image: "description".to_string(),
                     external_link: None,
-                    explicit_content: None,
-                    start_trading_time: None,
                     // royalty_info: None,
                 },
             };
@@ -227,7 +225,6 @@ mod tests {
                         description: Some(params.info.description.clone()),
                         image: Some(params.info.image.clone()),
                         external_link: Some(params.info.external_link.clone()),
-                        explicit_content: None,
                     },
                 },
                 &[],
@@ -245,19 +242,18 @@ mod tests {
                         description: Some(params.info.description.clone()),
                         image: Some(params.info.image.clone()),
                         external_link: Some(params.info.external_link.clone()),
-                        explicit_content: Some(true),
                     },
                 },
                 &[],
             );
             assert!(res.is_ok());
 
-            let res: CollectionInfoResponse = app
-                .wrap()
-                .query_wasm_smart(contract.clone(), &QueryMsg::CollectionInfo {})
-                .unwrap();
-            // check explicit content changed to true
-            assert!(res.explicit_content.unwrap());
+            // let res: CollectionInfoResponse = app
+            //     .wrap()
+            //     .query_wasm_smart(contract.clone(), &QueryMsg::CollectionInfo {})
+            //     .unwrap();
+            // // check explicit content changed to true
+            // assert!(res.explicit_content.unwrap());
 
             // freeze collection throw err if not creator
             let res = app.execute_contract(
@@ -286,7 +282,6 @@ mod tests {
                         description: Some(params.info.description.clone()),
                         image: Some(params.info.image.clone()),
                         external_link: Some(params.info.external_link),
-                        explicit_content: None,
                     },
                 },
                 &[],

@@ -72,8 +72,6 @@ where
             description: msg.collection_info.description,
             image: msg.collection_info.image,
             external_link: msg.collection_info.external_link,
-            explicit_content: msg.collection_info.explicit_content,
-            start_trading_time: msg.collection_info.start_trading_time,
         };
 
         self.collection_info.save(deps.storage, &collection_info)?;
@@ -217,7 +215,6 @@ where
             Url::parse(collection.external_link.as_ref().unwrap())?;
         }
 
-        collection.explicit_content = collection_msg.explicit_content;
 
         self.collection_info.save(deps.storage, &collection)?;
 
@@ -237,7 +234,6 @@ where
         assert_minter_owner(deps.storage, &info.sender)?;
 
         let mut collection_info = self.collection_info.load(deps.storage)?;
-        collection_info.start_trading_time = start_time;
         self.collection_info.save(deps.storage, &collection_info)?;
 
         let event = Event::new("update_start_trading_time").add_attribute("sender", info.sender);
@@ -321,8 +317,6 @@ where
             description: info.description,
             image: info.image,
             external_link: info.external_link,
-            explicit_content: info.explicit_content,
-            start_trading_time: info.start_trading_time,
         })
     }
 
