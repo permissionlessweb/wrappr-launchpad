@@ -6,8 +6,8 @@
 
 import { SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
 import { StdFee } from "@cosmjs/amino";
-import { Uint128, InstantiateMsg, MinterParamsForNullable_Empty, Coin, Empty, ExecuteMsg, Decimal, Timestamp, Uint64, CreateMinterMsgForNullable_Empty, CollectionParams, CollectionInfoForRoyaltyInfoResponse, RoyaltyInfoResponse } from "./BaseFactory.types";
-export interface BaseFactoryInterface {
+import { ExecuteMsg, Timestamp, Uint64, Uint128, CreateMinterMsgForWrapprMinterInitMsgExtension, CollectionParams, CollectionInfo, WrapprMinterInitMsgExtension, Coin, InstantiateMsg, MinterParamsForNullable_Empty, Empty } from "./WrapprFactory.types";
+export interface WrapprFactoryInterface {
   contractAddress: string;
   sender: string;
   createMinter: ({
@@ -15,10 +15,10 @@ export interface BaseFactoryInterface {
     initMsg
   }: {
     collectionParams: CollectionParams;
-    initMsg?: Empty;
+    initMsg: WrapprMinterInitMsgExtension;
   }, fee?: number | StdFee | "auto", memo?: string, funds?: Coin[]) => Promise<ExecuteResult>;
 }
-export class BaseFactoryClient implements BaseFactoryInterface {
+export class WrapprFactoryClient implements WrapprFactoryInterface {
   client: SigningCosmWasmClient;
   sender: string;
   contractAddress: string;
@@ -35,7 +35,7 @@ export class BaseFactoryClient implements BaseFactoryInterface {
     initMsg
   }: {
     collectionParams: CollectionParams;
-    initMsg?: Empty;
+    initMsg: WrapprMinterInitMsgExtension;
   }, fee: number | StdFee | "auto" = "auto", memo?: string, funds?: Coin[]): Promise<ExecuteResult> => {
     return await this.client.execute(this.sender, this.contractAddress, {
       create_minter: {

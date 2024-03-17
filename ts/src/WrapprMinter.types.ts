@@ -4,38 +4,50 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-export type Decimal = string;
+export type ExecuteMsg = {
+  mint: {
+    token_uri: string;
+  };
+} | {
+  update_start_trading_time: Timestamp | null;
+};
 export type Timestamp = Uint64;
 export type Uint64 = string;
 export type Uint128 = string;
 export interface InstantiateMsg {
-  create_msg: CreateMinterMsgForNullable_Empty;
+  create_msg: CreateMinterMsgForWrapprMinterInitMsgExtension;
   params: MinterParamsForNullable_Empty;
 }
-export interface CreateMinterMsgForNullable_Empty {
+export interface CreateMinterMsgForWrapprMinterInitMsgExtension {
   collection_params: CollectionParams;
-  init_msg?: Empty | null;
+  init_msg: WrapprMinterInitMsgExtension;
 }
 export interface CollectionParams {
   code_id: number;
-  info: CollectionInfoForRoyaltyInfoResponse;
+  info: CollectionInfo;
   name: string;
   symbol: string;
 }
-export interface CollectionInfoForRoyaltyInfoResponse {
+export interface CollectionInfo {
   creator: string;
   description: string;
   explicit_content?: boolean | null;
   external_link?: string | null;
   image: string;
-  royalty_info?: RoyaltyInfoResponse | null;
   start_trading_time?: Timestamp | null;
 }
-export interface RoyaltyInfoResponse {
-  payment_address: string;
-  share: Decimal;
+export interface WrapprMinterInitMsgExtension {
+  entity: string;
+  jurisdiction: string;
+  mint_price: Coin;
+  payment_address?: string | null;
+  per_address_limit: number;
+  start_time: Timestamp;
+  whitelist?: string | null;
 }
-export interface Empty {
+export interface Coin {
+  amount: Uint128;
+  denom: string;
   [k: string]: unknown;
 }
 export interface MinterParamsForNullable_Empty {
@@ -48,15 +60,6 @@ export interface MinterParamsForNullable_Empty {
   min_mint_price: Coin;
   mint_fee_bps: number;
 }
-export interface Coin {
-  amount: Uint128;
-  denom: string;
+export interface Empty {
   [k: string]: unknown;
 }
-export type ExecuteMsg = {
-  mint: {
-    token_uri: string;
-  };
-} | {
-  update_start_trading_time: Timestamp | null;
-};

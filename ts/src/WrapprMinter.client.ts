@@ -6,8 +6,8 @@
 
 import { SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
 import { StdFee } from "@cosmjs/amino";
-import { Decimal, Timestamp, Uint64, Uint128, InstantiateMsg, CreateMinterMsgForNullable_Empty, CollectionParams, CollectionInfoForRoyaltyInfoResponse, RoyaltyInfoResponse, Empty, MinterParamsForNullable_Empty, Coin, ExecuteMsg } from "./BaseMinter.types";
-export interface BaseMinterInterface {
+import { ExecuteMsg, Timestamp, Uint64, Uint128, InstantiateMsg, CreateMinterMsgForWrapprMinterInitMsgExtension, CollectionParams, CollectionInfo, WrapprMinterInitMsgExtension, Coin, MinterParamsForNullable_Empty, Empty } from "./WrapprMinter.types";
+export interface WrapprMinterInterface {
   contractAddress: string;
   sender: string;
   mint: ({
@@ -17,7 +17,7 @@ export interface BaseMinterInterface {
   }, fee?: number | StdFee | "auto", memo?: string, funds?: Coin[]) => Promise<ExecuteResult>;
   updateStartTradingTime: (fee?: number | StdFee | "auto", memo?: string, funds?: Coin[]) => Promise<ExecuteResult>;
 }
-export class BaseMinterClient implements BaseMinterInterface {
+export class WrapprMinterClient implements WrapprMinterInterface {
   client: SigningCosmWasmClient;
   sender: string;
   contractAddress: string;

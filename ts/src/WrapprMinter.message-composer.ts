@@ -7,8 +7,8 @@
 import { MsgExecuteContractEncodeObject } from "cosmwasm";
 import { MsgExecuteContract } from "cosmjs-types/cosmwasm/wasm/v1/tx";
 import { toUtf8 } from "@cosmjs/encoding";
-import { Decimal, Timestamp, Uint64, Uint128, InstantiateMsg, CreateMinterMsgForNullable_Empty, CollectionParams, CollectionInfoForRoyaltyInfoResponse, RoyaltyInfoResponse, Empty, MinterParamsForNullable_Empty, Coin, ExecuteMsg } from "./BaseMinter.types";
-export interface BaseMinterMessage {
+import { ExecuteMsg, Timestamp, Uint64, Uint128, InstantiateMsg, CreateMinterMsgForWrapprMinterInitMsgExtension, CollectionParams, CollectionInfo, WrapprMinterInitMsgExtension, Coin, MinterParamsForNullable_Empty, Empty } from "./WrapprMinter.types";
+export interface WrapprMinterMessage {
   contractAddress: string;
   sender: string;
   mint: ({
@@ -18,7 +18,7 @@ export interface BaseMinterMessage {
   }, funds?: Coin[]) => MsgExecuteContractEncodeObject;
   updateStartTradingTime: (funds?: Coin[]) => MsgExecuteContractEncodeObject;
 }
-export class BaseMinterMessageComposer implements BaseMinterMessage {
+export class WrapprMinterMessageComposer implements WrapprMinterMessage {
   sender: string;
   contractAddress: string;
 

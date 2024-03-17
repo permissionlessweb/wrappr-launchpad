@@ -5,8 +5,8 @@
 */
 
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Expiration, Timestamp, Uint64, AllNftInfoResponse, OwnerOfResponse, Approval, NftInfoResponseForEmpty, Empty, AllOperatorsResponse, AllTokensResponse, ApprovalResponse, ApprovalsResponse, Decimal, CollectionInfoResponse, RoyaltyInfoResponse, ContractInfoResponse, ExecuteMsgForNullable_EmptyAndEmpty, Binary, UpdateCollectionInfoMsgForRoyaltyInfoResponse, InstantiateMsg, CollectionInfoForRoyaltyInfoResponse, MinterResponse, NftInfoResponse, NumTokensResponse, QueryMsg, TokensResponse } from "./Sg721Updatable.types";
-export interface Sg721UpdatableReadOnlyInterface {
+import { Expiration, Timestamp, Uint64, AllNftInfoResponse, OwnerOfResponse, Approval, NftInfoResponseForEmpty, Empty, AllOperatorsResponse, AllTokensResponse, ApprovalResponse, ApprovalsResponse, CollectionInfoResponse, ContractInfoResponse, InstantiateMsg, CollectionInfo, MinterResponse, NftInfoResponse, NumTokensResponse, OperatorsResponse, QueryMsg, TokensResponse } from "./Wrappr721Base.types";
+export interface Wrappr721BaseReadOnlyInterface {
   contractAddress: string;
   ownerOf: ({
     includeExpired,
@@ -76,7 +76,7 @@ export interface Sg721UpdatableReadOnlyInterface {
   collectionInfo: () => Promise<CollectionInfoResponse>;
   ownership: () => Promise<OwnershipResponse>;
 }
-export class Sg721UpdatableQueryClient implements Sg721UpdatableReadOnlyInterface {
+export class Wrappr721BaseQueryClient implements Wrappr721BaseReadOnlyInterface {
   client: CosmWasmClient;
   contractAddress: string;
 

@@ -15,7 +15,7 @@ export type Timestamp = Uint64;
 export type Uint64 = string;
 export interface AllNftInfoResponse {
   access: OwnerOfResponse;
-  info: NftInfoResponseForMetadata;
+  info: NftInfoResponseForEmpty;
 }
 export interface OwnerOfResponse {
   approvals: Approval[];
@@ -25,25 +25,12 @@ export interface Approval {
   expires: Expiration;
   spender: string;
 }
-export interface NftInfoResponseForMetadata {
-  extension: Metadata;
+export interface NftInfoResponseForEmpty {
+  extension: Empty;
   token_uri?: string | null;
 }
-export interface Metadata {
-  animation_url?: string | null;
-  attributes?: Trait[] | null;
-  background_color?: string | null;
-  description?: string | null;
-  external_url?: string | null;
-  image?: string | null;
-  image_data?: string | null;
-  name?: string | null;
-  youtube_url?: string | null;
-}
-export interface Trait {
-  display_type?: string | null;
-  trait_type: string;
-  value: string;
+export interface Empty {
+  [k: string]: unknown;
 }
 export interface AllOperatorsResponse {
   operators: Approval[];
@@ -57,44 +44,37 @@ export interface ApprovalResponse {
 export interface ApprovalsResponse {
   approvals: Approval[];
 }
-export type Decimal = string;
 export interface CollectionInfoResponse {
   creator: string;
   description: string;
   explicit_content?: boolean | null;
   external_link?: string | null;
   image: string;
-  royalty_info?: RoyaltyInfoResponse | null;
   start_trading_time?: Timestamp | null;
-}
-export interface RoyaltyInfoResponse {
-  payment_address: string;
-  share: Decimal;
 }
 export interface ContractInfoResponse {
   name: string;
   symbol: string;
 }
 export interface InstantiateMsg {
-  collection_info: CollectionInfoForRoyaltyInfoResponse;
+  collection_info: CollectionInfo;
   minter: string;
   name: string;
   symbol: string;
 }
-export interface CollectionInfoForRoyaltyInfoResponse {
+export interface CollectionInfo {
   creator: string;
   description: string;
   explicit_content?: boolean | null;
   external_link?: string | null;
   image: string;
-  royalty_info?: RoyaltyInfoResponse | null;
   start_trading_time?: Timestamp | null;
 }
 export interface MinterResponse {
   minter?: string | null;
 }
 export interface NftInfoResponse {
-  extension: Metadata;
+  extension: Empty;
   token_uri?: string | null;
 }
 export interface NumTokensResponse {

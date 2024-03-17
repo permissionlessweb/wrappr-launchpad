@@ -4,36 +4,37 @@
 * and run the @cosmwasm/ts-codegen generate command to regenerate this file.
 */
 
-import { Coin } from "@cosmjs/amino";
 import { MsgExecuteContractEncodeObject } from "cosmwasm";
 import { MsgExecuteContract } from "cosmjs-types/cosmwasm/wasm/v1/tx";
 import { toUtf8 } from "@cosmjs/encoding";
-import { Group, Admin, Binary, InstantiateMsg, ContractInstantiateMsg, ExecuteMsg, QueryMsg, AdminResponse, Addr, MemberListResponse, Member, MemberResponse } from "./Splits.types";
-export interface SplitsMessage {
+import { ExecuteMsg, Timestamp, Uint64, Uint128, CreateMinterMsgForWrapprMinterInitMsgExtension, CollectionParams, CollectionInfo, WrapprMinterInitMsgExtension, Coin, InstantiateMsg, MinterParamsForNullable_Empty, Empty } from "./WrapprFactory.types";
+export interface WrapprFactoryMessage {
   contractAddress: string;
   sender: string;
-  updateAdmin: ({
-    admin
+  createMinter: ({
+    collectionParams,
+    initMsg
   }: {
-    admin?: string;
+    collectionParams: CollectionParams;
+    initMsg: WrapprMinterInitMsgExtension;
   }, funds?: Coin[]) => MsgExecuteContractEncodeObject;
-  distribute: (funds?: Coin[]) => MsgExecuteContractEncodeObject;
 }
-export class SplitsMessageComposer implements SplitsMessage {
+export class WrapprFactoryMessageComposer implements WrapprFactoryMessage {
   sender: string;
   contractAddress: string;
 
   constructor(sender: string, contractAddress: string) {
     this.sender = sender;
     this.contractAddress = contractAddress;
-    this.updateAdmin = this.updateAdmin.bind(this);
-    this.distribute = this.distribute.bind(this);
+    this.createMinter = this.createMinter.bind(this);
   }
 
-  updateAdmin = ({
-    admin
+  createMinter = ({
+    collectionParams,
+    initMsg
   }: {
-    admin?: string;
+    collectionParams: CollectionParams;
+    initMsg: WrapprMinterInitMsgExtension;
   }, funds?: Coin[]): MsgExecuteContractEncodeObject => {
     return {
       typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
@@ -41,22 +42,10 @@ export class SplitsMessageComposer implements SplitsMessage {
         sender: this.sender,
         contract: this.contractAddress,
         msg: toUtf8(JSON.stringify({
-          update_admin: {
-            admin
+          create_minter: {
+            collection_params: collectionParams,
+            init_msg: initMsg
           }
-        })),
-        funds
-      })
-    };
-  };
-  distribute = (funds?: Coin[]): MsgExecuteContractEncodeObject => {
-    return {
-      typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
-      value: MsgExecuteContract.fromPartial({
-        sender: this.sender,
-        contract: this.contractAddress,
-        msg: toUtf8(JSON.stringify({
-          distribute: {}
         })),
         funds
       })
