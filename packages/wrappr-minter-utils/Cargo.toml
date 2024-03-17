@@ -1,9 +1,6 @@
 [package]
 name        = "wrappr-minter-utils"
-authors     = [
-    "Shane Vitarana <s@noreply.publicawesome.com>",
-    "A Hardnett <returniflost@skiff.com>",
-    ]
+authors     = ["Shane Vitarana <s@noreply.publicawesome.com>"]
 description = "Definition and types for the SG4 interface"
 version     = { workspace = true }
 edition     = { workspace = true }

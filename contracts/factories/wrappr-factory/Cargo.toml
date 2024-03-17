@@ -1,9 +1,6 @@
 [package]
 name        = "wrappr-factory"
-authors     = [
-  "Shane Vitarana <s@noreply.publicawesome.com>",
-  "A Hardnett <returniflost@skiff.com>",
-    ]
+authors     = ["Shane Vitarana <s@noreply.publicawesome.com>"]
 description = "A 1/1 Stargaze minter factory"
 version     = { workspace = true }
 edition     = { workspace = true }
@@ -36,7 +33,6 @@ cw-storage-plus = { workspace = true }
 cw-utils        = { workspace = true }
 schemars        = { workspace = true }
 serde           = { workspace = true }
-wrappr-fee             = { workspace = true }
 wrappr-factory-utils             = { workspace = true }
-wrappr-utils          = { workspace = true }
+sg-std          = { workspace = true }
 thiserror       = { workspace = true }

@@ -3,7 +3,7 @@ use url::Url;
 
 use cosmwasm_std::{
     to_json_binary, Addr, Binary, ContractInfoResponse, Decimal, Deps, DepsMut, Empty, Env, Event,
-    MessageInfo, StdError, StdResult, Storage, WasmQuery,
+    MessageInfo, Response, StdError, StdResult, Storage, Timestamp, WasmQuery,
 };
 
 use cw721::{ContractInfoResponse as CW721ContractInfoResponse, Cw721Execute};
@@ -11,10 +11,9 @@ use cw_utils::nonpayable;
 use serde::{de::DeserializeOwned, Serialize};
 
 use wrappr721::{
-    CollectionInfo, ExecuteMsg, InstantiateMsg, RoyaltyInfo, RoyaltyInfoResponse,
+    CollectionInfo, ExecuteMsg, InstantiateMsg,
     UpdateCollectionInfoMsg,
 };
-use wrappr_utils::Response;
 
 use crate::msg::{CollectionInfoResponse, NftParams, QueryMsg};
 use crate::{ContractError, Wrappr721Contract};
@@ -68,14 +67,6 @@ where
             Url::parse(external_link)?;
         }
 
-        let royalty_info: Option<RoyaltyInfo> = match msg.collection_info.royalty_info {
-            Some(royalty_info) => Some(RoyaltyInfo {
-                payment_address: deps.api.addr_validate(&royalty_info.payment_address)?,
-                share: share_validate(royalty_info.share)?,
-            }),
-            None => None,
-        };
-
         deps.api.addr_validate(&msg.collection_info.creator)?;
 
         let collection_info = CollectionInfo {
@@ -83,9 +74,8 @@ where
             description: msg.collection_info.description,
             image: msg.collection_info.image,
             external_link: msg.collection_info.external_link,
-            jurisdiction: msg.collection_info.jurisdiction,
-            entity: msg.collection_info.entity,
-            royalty_info,
+            explicit_content: msg.collection_info.explicit_content,
+            start_trading_time: msg.collection_info.start_trading_time,
         };
 
         self.collection_info.save(deps.storage, &collection_info)?;
@@ -154,9 +144,9 @@ where
             ExecuteMsg::UpdateCollectionInfo { collection_info } => {
                 self.update_collection_info(deps, env, info, collection_info)
             }
-            // ExecuteMsg::UpdateStartTradingTime(start_time) => {
-            //     self.update_start_trading_time(deps, env, info, start_time)
-            // }
+            ExecuteMsg::UpdateStartTradingTime(start_time) => {
+                self.update_start_trading_time(deps, env, info, start_time)
+            }
             ExecuteMsg::FreezeCollectionInfo {} => self.freeze_collection_info(deps, env, info),
             ExecuteMsg::Mint {
                 token_id,
@@ -194,7 +184,7 @@ where
         deps: DepsMut,
         env: Env,
         info: MessageInfo,
-        collection_msg: UpdateCollectionInfoMsg<RoyaltyInfoResponse>,
+        collection_msg: UpdateCollectionInfoMsg,
     ) -> Result<Response, ContractError> {
         let mut collection = self.collection_info.load(deps.storage)?;
 
@@ -205,6 +195,11 @@ where
         // only creator can update collection info
         if collection.creator != info.sender {
             return Err(ContractError::Unauthorized {});
+        }
+
+        if let Some(new_creator) = collection_msg.creator {
+            deps.api.addr_validate(&new_creator)?;
+            collection.creator = new_creator;
         }
 
         collection.description = collection_msg
@@ -226,45 +221,7 @@ where
             Url::parse(collection.external_link.as_ref().unwrap())?;
         }
 
-        // collection.explicit_content = collection_msg.explicit_content;
-        // TODO: update jurisdiction & entity ?
-
-        if let Some(Some(new_royalty_info_response)) = collection_msg.royalty_info {
-            let last_royalty_update = self.royalty_updated_at.load(deps.storage)?;
-            if last_royalty_update.plus_seconds(24 * 60 * 60) > env.block.time {
-                return Err(ContractError::InvalidRoyalties(
-                    "Royalties can only be updated once per day".to_string(),
-                ));
-            }
-
-            let new_royalty_info = RoyaltyInfo {
-                payment_address: deps
-                    .api
-                    .addr_validate(&new_royalty_info_response.payment_address)?,
-                share: share_validate(new_royalty_info_response.share)?,
-            };
-
-            if let Some(old_royalty_info) = collection.royalty_info {
-                if old_royalty_info.share < new_royalty_info.share {
-                    let share_delta = new_royalty_info.share.abs_diff(old_royalty_info.share);
-
-                    if share_delta > Decimal::percent(MAX_SHARE_DELTA_PCT) {
-                        return Err(ContractError::InvalidRoyalties(format!(
-                            "Share increase cannot be greater than {MAX_SHARE_DELTA_PCT}%"
-                        )));
-                    }
-                    if new_royalty_info.share > Decimal::percent(MAX_ROYALTY_SHARE_PCT) {
-                        return Err(ContractError::InvalidRoyalties(format!(
-                            "Share cannot be greater than {MAX_ROYALTY_SHARE_PCT}%"
-                        )));
-                    }
-                }
-            }
-
-            collection.royalty_info = Some(new_royalty_info);
-            self.royalty_updated_at
-                .save(deps.storage, &env.block.time)?;
-        }
+        collection.explicit_content = collection_msg.explicit_content;
 
         self.collection_info.save(deps.storage, &collection)?;
 
@@ -274,21 +231,22 @@ where
 
     /// Called by the minter reply handler after custom validations on trading start time.
     /// Minter has start_time, default offset, makes sense to execute from minter.
-    // pub fn update_start_trading_time(
-    //     &self,
-    //     deps: DepsMut,
-    //     _env: Env,
-    //     info: MessageInfo,
-    // ) -> Result<Response, ContractError> {
-    //     assert_minter_owner(deps.storage, &info.sender)?;
+    pub fn update_start_trading_time(
+        &self,
+        deps: DepsMut,
+        _env: Env,
+        info: MessageInfo,
+        start_time: Option<Timestamp>,
+    ) -> Result<Response, ContractError> {
+        assert_minter_owner(deps.storage, &info.sender)?;
 
-    //     let mut collection_info = self.collection_info.load(deps.storage)?;
-    //     // collection_info.start_trading_time = start_time;
-    //     self.collection_info.save(deps.storage, &collection_info)?;
+        let mut collection_info = self.collection_info.load(deps.storage)?;
+        collection_info.start_trading_time = start_time;
+        self.collection_info.save(deps.storage, &collection_info)?;
 
-    //     let event = Event::new("update_start_trading_time").add_attribute("sender", info.sender);
-    //     Ok(Response::new().add_event(event))
-    // }
+        let event = Event::new("update_start_trading_time").add_attribute("sender", info.sender);
+        Ok(Response::new().add_event(event))
+    }
 
     pub fn freeze_collection_info(
         &self,
@@ -361,22 +319,14 @@ where
     pub fn query_collection_info(&self, deps: Deps) -> StdResult<CollectionInfoResponse> {
         let info = self.collection_info.load(deps.storage)?;
 
-        let royalty_info_res: Option<RoyaltyInfoResponse> = match info.royalty_info {
-            Some(royalty_info) => Some(RoyaltyInfoResponse {
-                payment_address: royalty_info.payment_address.to_string(),
-                share: royalty_info.share,
-            }),
-            None => None,
-        };
 
         Ok(CollectionInfoResponse {
             creator: info.creator,
             description: info.description,
             image: info.image,
             external_link: info.external_link,
-            jurisdiction: info.jurisdiction,
-            entity: info.entity,
-            royalty_info: royalty_info_res,
+            explicit_content: info.explicit_content,
+            start_trading_time: info.start_trading_time,
         })
     }
 
@@ -395,15 +345,15 @@ where
 
         let mut response = Response::new();
 
-        // #[allow(clippy::cmp_owned)]
-        // if prev_contract_version.version < "3.0.0".to_string() {
-        //     response = crate::upgrades::v3_0_0::upgrade(deps.branch(), &env, response)?;
-        // }
+        #[allow(clippy::cmp_owned)]
+        if prev_contract_version.version < "3.0.0".to_string() {
+            response = crate::upgrades::v3_0_0::upgrade(deps.branch(), &env, response)?;
+        }
 
-        // #[allow(clippy::cmp_owned)]
-        // if prev_contract_version.version < "3.1.0".to_string() {
-        //     response = crate::upgrades::v3_1_0::upgrade(deps.branch(), &env, response)?;
-        // }
+        #[allow(clippy::cmp_owned)]
+        if prev_contract_version.version < "3.1.0".to_string() {
+            response = crate::upgrades::v3_1_0::upgrade(deps.branch(), &env, response)?;
+        }
 
         cw2::set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 

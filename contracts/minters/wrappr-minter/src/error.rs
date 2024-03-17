@@ -1,6 +1,5 @@
 use cosmwasm_std::{StdError, Timestamp};
 use cw_utils::PaymentError;
-use wrappr_fee::FeeError;
 use thiserror::Error;
 use url::ParseError;
 
@@ -15,8 +14,8 @@ pub enum ContractError {
     #[error("{0}")]
     ParseError(#[from] ParseError),
 
-    #[error("{0}")]
-    Fee(#[from] FeeError),
+    // #[error("{0}")]
+    // Fee(#[from] FeeError),
 
     #[error("Unauthorized: {0}")]
     Unauthorized(String),

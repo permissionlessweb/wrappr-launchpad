@@ -4,6 +4,6 @@ use wrappr_factory_utils::MinterParams;
 
 pub type Extension = Option<Empty>;
 
-pub type BaseMinterParams = MinterParams<Extension>;
+pub type WrapprMinterParams = MinterParams<Extension>;
 
-pub const SUDO_PARAMS: Item<BaseMinterParams> = Item::new("sudo-params");
+pub const SUDO_PARAMS: Item<WrapprMinterParams> = Item::new("sudo-params");

@@ -4,6 +4,7 @@ members = [
     "contracts/collections/*",
     "contracts/factories/*",
     "contracts/minters/*",
+    "test-suite/",
 ]
 resolver = "2"
 
@@ -15,38 +16,37 @@ repository = "https://github.com/permissionlessweb/wrappr-launchpad"
 license    = "Apache-2.0"
 
 [workspace.dependencies]
-wrappr-factory         = { version = "0.1.0", path = "contracts/factories/wrappr-factory" }
-wrappr-minter          = { version = "0.1.0", path = "contracts/minters/wrappr-minter" }
-cosmwasm-schema      = "1.2.1"
-cosmwasm-std         = "1.2.1"
-cw-controllers       = "1.1.0"
-cw2                  = "1.1.0"
-cw4                  = "1.1.0"
-cw4-group            = "1.1.0"
-cw721                = "0.18.0"
-cw721-base           = "0.18.0"
-cw-multi-test        = "0.16.2"
-cw-storage-plus      = "1.1.0"
-cw-utils             = "1.0.1"
-schemars             = "0.8.11"
-serde                = { version = "1.0.145", default-features = false, features = ["derive"] }
-wrappr-fee           = { version = "0.1.0", path = "packages/wrappr-fee" }
-wrappr-factory-utils    = { version = "0.1.0", path = "packages/wrappr-factory-utils" }
-wrappr-minter-utils  = { version = "0.1.0", path = "packages/wrappr-minter-utils" }
-wrappr721            = { version = "0.1.0", path = "packages/wrappr721" }
-wrappr721-base       = { version = "0.1.0", path = "contracts/collections/wrappr721-base" }
-wrappr-utils         = { version = "0.1.0", path = "packages/wrappr-utils" }
-thiserror            = "1.0.31"
-url                  = "2.2.2"
-sha2                 = { version = "0.10.2", default-features = false }
-semver               = "1"
-cw-ownable           = "0.5.1"
+wrappr-factory    = { version = "0.1.0", path = "contracts/factories/wrappr-factory" }
+wrappr-minter     = { version = "0.1.0", path = "contracts/minters/wrappr-minter" }
+cosmwasm-schema = "1.5.0"
+cosmwasm-std    = "1.5.0"
+cw-controllers  = "1.1.0"
+cw2             = "1.1.0"
+cw4             = "1.1.0"
+cw4-group       = "1.1.0"
+cw721           = "0.18.0"
+cw721-base      = "0.18.0"
+cw-multi-test   = "0.20.0"
+cw-storage-plus = "1.2.0"
+cw-utils        = "1.0.1"
+schemars        = "0.8.11"
+serde           = { version = "1.0", default-features = false, features = ["derive"] }
+serde_json      = "1.0"
+wrappr-factory-utils             = { version = "0.1.0", path = "packages/wrappr-factory-utils" }
+wrappr-minter-utils             = { version = "0.1.0", path = "packages/wrappr-minter-utils" }
+wrappr721           = { version = "0.1.0", path = "packages/wrappr721" }
+wrappr721-base      = { version = "0.1.0", path = "contracts/collections/wrappr721-base" }
+sg-multi-test   = { version = "3.1.0" }
+thiserror       = "1.0.31"
+url             = "2.2.2"
+sha2            = { version = "0.10.2", default-features = false }
+test-suite               = { version = "0.1.0", path = "test-suite" }
+sg-std          = { version = "3.2.0" }
+semver     = "1"
+cw-ownable = "0.5.1"
+anybuf     = "0.3.0"
 
 [profile.release.package.wrappr721]
-codegen-units = 1
-incremental   = false
-
-[profile.release.package.wrappr-fee]
 codegen-units = 1
 incremental   = false
 
@@ -62,7 +62,6 @@ incremental   = false
 codegen-units = 1
 incremental   = false
 
-
 [profile.release.package.wrappr-factory]
 codegen-units = 1
 incremental   = false
@@ -70,7 +69,6 @@ incremental   = false
 [profile.release.package.wrappr-minter]
 codegen-units = 1
 incremental   = false
-
 
 [profile.release]
 rpath            = false

@@ -1,9 +1,6 @@
 [package]
 name        = "wrappr721"
-authors     = [
-  "Shane Vitarana <s@noreply.publicawsome.com>",
-    "A Hardnett <returniflost@skiff.com>",
-    ]
+authors     = ["Shane Vitarana <s@noreply.publicawsome.com>"]
 description = "Stargaze Basic NFT Collection Interface"
 version     = { workspace = true }
 edition     = { workspace = true }

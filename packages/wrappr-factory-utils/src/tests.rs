@@ -1,118 +1,108 @@
 use crate::msg::CollectionParams;
 use cosmwasm_std::Decimal;
-use wrappr721::{CollectionInfo, RoyaltyInfoResponse};
+use cosmwasm_std::Timestamp;
+use wrappr721::{CollectionInfo};
 
 pub fn mock_collection_params() -> CollectionParams {
     CollectionParams {
         code_id: 1,
         name: "Collection Name".to_string(),
         symbol: "COL".to_string(),
-        jurisdiction: String::from("Mars"),
-        entity: String:: from("Red Rock"),
         info: CollectionInfo {
             creator: "creator".to_string(),
-            description: String::from("Flower Flamingos"),
+            description: String::from("DAO Tooling"),
             image: "https://example.com/image.png".to_string(),
             external_link: Some("https://example.com/external.html".to_string()),
-            royalty_info: Some(RoyaltyInfoResponse {
-                payment_address: "creator".to_string(),
-                share: Decimal::percent(10),
-            }),
-            jurisdiction: String::from("Mars"),
-            entity: String:: from("Red Rock"),
+            start_trading_time: None,
+            explicit_content: Some(false),
+            // royalty_info: Some(RoyaltyInfoResponse {
+            //     payment_address: "creator".to_string(),
+            //     share: Decimal::percent(10),
+            // }),
         },
     }
 }
 
-pub fn mock_collection_params_1() -> CollectionParams {
+pub fn mock_collection_params_1(start_trading_time: Option<Timestamp>) -> CollectionParams {
     CollectionParams {
         code_id: 1,
         name: "Collection Name".to_string(),
         symbol: "COL".to_string(),
-        jurisdiction: String::from("Moon"),
-        entity: String:: from("Dusty LLC"),
         info: CollectionInfo {
             creator: "creator".to_string(),
-            description: String::from("Flower Flamingos"),
+            description: String::from("DAO Tooling"),
             image: "https://example.com/image.png".to_string(),
             external_link: Some("https://example.com/external.html".to_string()),
-            jurisdiction: String::from("Moon"),
-            entity: String:: from("Dusty LLC"),
-            royalty_info: Some(RoyaltyInfoResponse {
-                payment_address: "creator".to_string(),
-                share: Decimal::percent(10),
-            }),
-            
+            start_trading_time,
+            explicit_content: Some(false),
+            // royalty_info: Some(RoyaltyInfoResponse {
+            //     payment_address: "creator".to_string(),
+            //     share: Decimal::percent(10),
+            // }),
         },
     }
 }
 
-pub fn mock_curator_payment_address() -> CollectionParams {
+pub fn mock_curator_payment_address(start_trading_time: Option<Timestamp>) -> CollectionParams {
     CollectionParams {
         code_id: 1,
         name: String::from("Test Coin"),
         symbol: String::from("TEST"),
-        jurisdiction: String::from("Moon"),
-        entity: String:: from("Dusty LLC"),
         info: CollectionInfo {
             creator: "creator".to_string(),
-            description: String::from("Flower Flamingos"),
+            description: String::from("DAO Tooling"),
             image: "https://example.com/image.png".to_string(),
             external_link: Some("https://example.com/external.html".to_string()),
-            royalty_info: Some(RoyaltyInfoResponse {
-                payment_address: "curator".to_string(),
-                share: Decimal::percent(10),
-            }),
-            jurisdiction: String::from("Mars"),
-            entity: String:: from("Red Rock Specialist Certificate"),
+            // royalty_info: Some(RoyaltyInfoResponse {
+            //     payment_address: "curator".to_string(),
+            //     share: Decimal::percent(10),
+            // }),
+            start_trading_time,
+            explicit_content: None,
         },
     }
 }
 
-pub fn mock_collection_params_high_fee() -> CollectionParams {
+pub fn mock_collection_params_high_fee(start_trading_time: Option<Timestamp>) -> CollectionParams {
     CollectionParams {
         code_id: 1,
         name: String::from("Test Coin"),
         symbol: String::from("TEST"),
-        jurisdiction: String::from("Moon"),
-        entity: String:: from("Dusty LLC"),
         info: CollectionInfo {
             creator: "creator".to_string(),
-            description: String::from("Flower Flamingos"),
+            description: String::from("DAO Tooling"),
             image:
                 "ipfs://bafybeigi3bwpvyvsmnbj46ra4hyffcxdeaj6ntfk5jpic5mx27x6ih2qvq/images/1.png"
                     .to_string(),
             external_link: Some("https://example.com/external.html".to_string()),
-            royalty_info: Some(RoyaltyInfoResponse {
-                payment_address: "creator".to_string(),
-                share: Decimal::percent(100),
-            }),
-            jurisdiction: String::from("Jupiter"),
-            entity: String:: from("Big Gas Non-Profit Cooperation"),
+            // royalty_info: Some(RoyaltyInfoResponse {
+            //     payment_address: "creator".to_string(),
+            //     share: Decimal::percent(100),
+            // }),
+            start_trading_time,
+            explicit_content: None,
         },
     }
 }
 
-pub fn mock_collection_two() -> CollectionParams {
+pub fn mock_collection_two(start_trading_time: Option<Timestamp>) -> CollectionParams {
     CollectionParams {
         code_id: 1,
         name: String::from("Test Collection 2"),
         symbol: String::from("TEST 2"),
-        jurisdiction: String::from("Pluto"),
-        entity: String:: from("Independent"),
         info: CollectionInfo {
             creator: "creator".to_string(),
-            description: String::from("Flower Flamingos 2"),
+            description: String::from("DAO Tooling 2"),
             image:
                 "ipfs://bafybeigi3bwpvyvsmnbj46ra4hyffcxdeaj6ntfk5jpic5mx27x6ih2qvq/images/1.png"
                     .to_string(),
             external_link: Some("https://example.com/external.html".to_string()),
-            royalty_info: Some(RoyaltyInfoResponse {
-                payment_address: "creator".to_string(),
-                share: Decimal::percent(10),
-            }),
-            jurisdiction: String::from("Pluto"),
-            entity: String:: from("Independent"),
+            // royalty_info: Some(RoyaltyInfoResponse {
+            //     payment_address: "creator".to_string(),
+            //     share: Decimal::percent(10),
+            // }),
+            start_trading_time,
+            explicit_content: None,
         },
     }
 }

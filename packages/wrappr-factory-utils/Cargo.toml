@@ -3,7 +3,6 @@ name = "wrappr-factory-utils"
 authors = [
     "Shane Vitarana <s@noreply.publicawesome.com>",
     "John Y <j@noreply.publicawesome.com>",
-    "A Hardnett <returniflost@skiff.com>",
 ]
 description = "Definition and types for the SG2 interface"
 version = { workspace = true }
@@ -19,5 +18,5 @@ cw-storage-plus = { workspace = true }
 cw-utils        = { workspace = true }
 schemars        = { workspace = true }
 serde           = { workspace = true }
-wrappr721           = { workspace = true }
+wrappr721   = { workspace = true }
 thiserror       = { workspace = true }

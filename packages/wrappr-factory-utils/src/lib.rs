@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::Coin;
+use cosmwasm_std::{Coin, Timestamp};
 
 pub mod msg;
 pub mod query;
@@ -17,7 +17,18 @@ pub struct MinterParams<T> {
     pub creation_fee: Coin,
     pub min_mint_price: Coin,
     pub mint_fee_bps: u64,
-    pub jurisdiction: String,
-    pub entity: String,
+    pub max_trading_offset_secs: u64,
     pub extension: T,
+}
+
+
+#[cw_serde]
+pub struct WrapprMinterInitMsgExtension {
+    pub payment_address: Option<String>,
+    pub start_time: Timestamp,
+    pub mint_price: Coin,
+    pub per_address_limit: u32,
+    pub whitelist: Option<String>,
+    pub entity: String,
+    pub jurisdiction: String,
 }

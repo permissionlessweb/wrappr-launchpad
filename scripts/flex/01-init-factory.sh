@@ -4,7 +4,7 @@ MSG=$(cat <<EOF
 {
   "params": {
     "code_id": $MINTER_CODE_ID,
-    "allowed_wrappr721_code_ids": [$SG721_BASE_CODE_ID],
+    "allowed_wrappr721_code_ids": [$wrappr721_base_CODE_ID],
     "frozen": false,
     "creation_fee": {"amount": "20000000000", "denom": "ustars"},
     "min_mint_price": {"amount": "0", "denom": "ustars"},

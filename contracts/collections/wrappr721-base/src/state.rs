@@ -1,17 +1,17 @@
 use cosmwasm_std::{Empty, Timestamp};
 use cw_storage_plus::Item;
 use serde::{de::DeserializeOwned, Serialize};
-use wrappr721::{CollectionInfo, RoyaltyInfo};
-use wrappr_utils::WrapprMsgWrapper;
+use wrappr721::CollectionInfo;
+
 use std::ops::Deref;
 
-type Parent<'a, T> = cw721_base::Cw721Contract<'a, T, WrapprMsgWrapper, Empty, Empty>;
+type Parent<'a, T> = cw721_base::Cw721Contract<'a, T, Empty, Empty, Empty>;
 pub struct Wrappr721Contract<'a, T>
 where
     T: Serialize + DeserializeOwned + Clone,
 {
     pub parent: Parent<'a, T>,
-    pub collection_info: Item<'a, CollectionInfo<RoyaltyInfo>>,
+    pub collection_info: Item<'a, CollectionInfo>,
 
     /// Instantiate set to false by the minter, then true by creator to freeze collection info
     pub frozen_collection_info: Item<'a, bool>,

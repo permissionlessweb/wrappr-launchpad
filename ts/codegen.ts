@@ -4,11 +4,11 @@ codegen({
   contracts: [
     {
       name: "BaseFactory",
-      dir: "../contracts/factories/wrappr-factory/schema",
+      dir: "../contracts/factories/base-factory/schema",
     },
     {
       name: "BaseMinter",
-      dir: "../contracts/minters/wrappr-minter/schema",
+      dir: "../contracts/minters/base-minter/schema",
     },
     {
       name: "Sg721Base",

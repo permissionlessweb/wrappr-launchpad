@@ -4,11 +4,11 @@ use crate::CodeId;
 use crate::MinterParams;
 
 #[cw_serde]
-pub enum WrapprFactoryQueryMsg {
+pub enum Sg2QueryMsg {
     /// Returns `ParamsResponse`
     Params {},
-    AllowedWrappr721CodeIds {},
-    AllowedWrappr721CodeId(CodeId),
+    AllowedCollectionCodeIds {},
+    AllowedCollectionCodeId(CodeId),
 }
 
 #[cw_serde]
@@ -17,11 +17,11 @@ pub struct ParamsResponse<T> {
 }
 
 #[cw_serde]
-pub struct AllowedWrappr721CodeIdsResponse {
+pub struct AllowedCollectionCodeIdsResponse {
     pub code_ids: Vec<CodeId>,
 }
 
 #[cw_serde]
-pub struct AllowedWrappr721CodeIdResponse {
+pub struct AllowedCollectionCodeIdResponse {
     pub allowed: bool,
 }

@@ -1,7 +1,6 @@
-
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::Coin;
-use wrappr721::{CollectionInfo, RoyaltyInfoResponse};
+use wrappr721::{CollectionInfo};
 
 #[cw_serde]
 pub struct CreateMinterMsg<T> {
@@ -15,9 +14,7 @@ pub struct CollectionParams {
     pub code_id: u64,
     pub name: String,
     pub symbol: String,
-    pub jurisdiction: String,
-    pub entity: String,
-    pub info: CollectionInfo<RoyaltyInfoResponse>,
+    pub info: CollectionInfo,
 }
 
 /// Message for params so they can be updated individually by governance
@@ -32,8 +29,6 @@ pub struct UpdateMinterParamsMsg<T> {
     pub min_mint_price: Option<Coin>,
     pub mint_fee_bps: Option<u64>,
     pub max_trading_offset_secs: Option<u64>,
-    pub entity: Option<String>,
-    pub jurisdiction: Option<String>,
     pub extension: T,
 }
 

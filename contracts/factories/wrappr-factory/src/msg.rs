@@ -1,17 +1,17 @@
 use crate::state::Extension;
 use cosmwasm_schema::cw_serde;
-use wrappr_factory_utils::msg::{CreateMinterMsg, WrapprFactoryExecuteMsg, UpdateMinterParamsMsg};
+use wrappr_factory_utils::{msg::{CreateMinterMsg, WrapprFactoryExecuteMsg, UpdateMinterParamsMsg}, WrapprMinterInitMsgExtension};
 
-use crate::state::BaseMinterParams;
+use crate::state::WrapprMinterParams;
 
 #[cw_serde]
 pub struct InstantiateMsg {
-    pub params: BaseMinterParams,
+    pub params: WrapprMinterParams,
 }
 
-pub type BaseMinterCreateMsg = CreateMinterMsg<Extension>;
+pub type WrapprMinterCreateMsg = CreateMinterMsg<WrapprMinterInitMsgExtension>;
 
-pub type ExecuteMsg = WrapprFactoryExecuteMsg<Extension>;
+pub type ExecuteMsg = WrapprFactoryExecuteMsg<WrapprMinterInitMsgExtension>;
 
 pub type BaseUpdateParamsMsg = UpdateMinterParamsMsg<Extension>;
 
@@ -23,5 +23,5 @@ pub type BaseSudoMsg = SudoMsg<BaseUpdateParamsMsg>;
 
 #[cw_serde]
 pub struct ParamsResponse {
-    pub params: BaseMinterParams,
+    pub params: WrapprMinterParams,
 }

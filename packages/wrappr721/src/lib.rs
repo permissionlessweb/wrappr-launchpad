@@ -1,7 +1,11 @@
+use std::vec;
+
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Binary, Decimal, Timestamp};
 use cw_ownable::cw_ownable_execute;
 use cw_utils::Expiration;
+
+
 
 #[cw_ownable_execute]
 #[cw_serde]
@@ -63,55 +67,31 @@ pub enum ExecuteMsg<T, E> {
     },
     /// Update specific collection info fields
     UpdateCollectionInfo {
-        collection_info: UpdateCollectionInfoMsg<RoyaltyInfoResponse>,
+        collection_info: UpdateCollectionInfoMsg,
     },
-    // /// Called by the minter to update trading start time
-    // UpdateStartTradingTime(Option<Timestamp>),
+    /// Called by the minter to update trading start time
+    UpdateStartTradingTime(Option<Timestamp>),
     // Freeze collection info from further updates
     FreezeCollectionInfo,
 }
 
 #[cw_serde]
-pub struct CollectionInfo<T> {
+pub struct CollectionInfo {
     pub creator: String,
     pub description: String,
     pub image: String,
     pub external_link: Option<String>,
-    pub jurisdiction: String,
-    pub entity: String,
-    pub royalty_info: Option<T>,
+    pub explicit_content: Option<bool>,
+    pub start_trading_time: Option<Timestamp>,
 }
 
 #[cw_serde]
-pub struct UpdateCollectionInfoMsg<T> {
+pub struct UpdateCollectionInfoMsg<> {
     pub description: Option<String>,
     pub image: Option<String>,
     pub external_link: Option<Option<String>>,
-    // pub jurisdiction: Option<String>,
-    // pub entity: Option<String>,
-    pub royalty_info: Option<Option<T>>,
-}
-
-#[cw_serde]
-pub struct RoyaltyInfo {
-    pub payment_address: Addr,
-    pub share: Decimal,
-}
-
-// allows easy conversion from RoyaltyInfo to RoyaltyInfoResponse
-impl RoyaltyInfo {
-    pub fn to_response(&self) -> RoyaltyInfoResponse {
-        RoyaltyInfoResponse {
-            payment_address: self.payment_address.to_string(),
-            share: self.share,
-        }
-    }
-}
-
-#[cw_serde]
-pub struct RoyaltyInfoResponse {
-    pub payment_address: String,
-    pub share: Decimal,
+    pub explicit_content: Option<bool>,
+    pub creator: Option<String>,
 }
 
 #[cw_serde]
@@ -119,5 +99,5 @@ pub struct InstantiateMsg {
     pub name: String,
     pub symbol: String,
     pub minter: String,
-    pub collection_info: CollectionInfo<RoyaltyInfoResponse>,
+    pub collection_info: CollectionInfo,
 }

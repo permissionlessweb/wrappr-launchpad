@@ -1,7 +1,9 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_schema::QueryResponses;
+use cosmwasm_std::Response;
+use cosmwasm_std::SubMsg;
 use cosmwasm_std::{
-    coin, Addr, BankMsg, Binary, Empty, Event, StdError, StdResult, Uint128,
+    coin, Addr, BankMsg, Binary, Empty, Event, StdError, StdResult, Timestamp, Uint128,
 };
 use cw721::{
     AllNftInfoResponse, ApprovalResponse, ApprovalsResponse, ContractInfoResponse, NftInfoResponse,
@@ -12,8 +14,11 @@ use cw721_base::msg::QueryMsg as Cw721QueryMsg;
 use cw_ownable::cw_ownable_execute;
 use cw_ownable::cw_ownable_query;
 use cw_utils::Expiration;
-use wrappr721::RoyaltyInfoResponse;
-use wrappr_utils::{Response, SubMsg, NATIVE_DENOM};
+
+
+// use sg_std::NATIVE_DENOM;
+// use sg_std::{Response, SubMsg, NATIVE_DENOM};
+
 
 #[cw_ownable_execute]
 #[cw_serde]
@@ -193,45 +198,11 @@ pub struct CollectionInfoResponse {
     pub description: String,
     pub image: String,
     pub external_link: Option<String>,
-    pub jurisdiction: String,
-    pub entity: String,
-    pub royalty_info: Option<RoyaltyInfoResponse>,
+    pub explicit_content: Option<bool>,
+    pub start_trading_time: Option<Timestamp>,
 }
 
-impl CollectionInfoResponse {
-    pub fn royalty_payout(
-        &self,
-        collection: Addr,
-        payment: Uint128,
-        protocol_fee: Uint128,
-        finders_fee: Option<Uint128>,
-        res: &mut Response,
-    ) -> StdResult<Uint128> {
-        if let Some(royalty_info) = self.royalty_info.as_ref() {
-            if royalty_info.share.is_zero() {
-                return Ok(Uint128::zero());
-            }
-            let royalty = coin((payment * royalty_info.share).u128(), NATIVE_DENOM);
-            if payment < (protocol_fee + finders_fee.unwrap_or(Uint128::zero()) + royalty.amount) {
-                return Err(StdError::generic_err("Fees exceed payment"));
-            }
-            res.messages.push(SubMsg::new(BankMsg::Send {
-                to_address: royalty_info.payment_address.to_string(),
-                amount: vec![royalty.clone()],
-            }));
-
-            let event = Event::new("royalty-payout")
-                .add_attribute("collection", collection.to_string())
-                .add_attribute("amount", royalty.to_string())
-                .add_attribute("recipient", royalty_info.payment_address.to_string());
-            res.events.push(event);
-
-            Ok(royalty.amount)
-        } else {
-            Ok(Uint128::zero())
-        }
-    }
-}
+impl CollectionInfoResponse {}
 
 #[cw_serde]
 pub enum NftParams<T> {

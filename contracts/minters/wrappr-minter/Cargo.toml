@@ -1,9 +1,6 @@
 [package]
 name        = "wrappr-minter"
-authors     = [
-  "Shane Vitarana <s@noreply.publicawesome.com>",
-  "A Hardnett <returniflost@skiff.com>",
-    ]
+authors     = ["Shane Vitarana <s@noreply.publicawesome.com>"]
 description = "Stargaze NFT basic 1/1 minter contract"
 version     = { workspace = true }
 edition     = { workspace = true }
@@ -39,11 +36,10 @@ cw-storage-plus = { workspace = true }
 cw-utils        = { workspace = true }
 schemars        = { workspace = true }
 serde           = { workspace = true }
-wrappr-fee             = { workspace = true }
 wrappr-factory-utils             = { workspace = true }
 wrappr-minter-utils             = { workspace = true }
-wrappr721           = { workspace = true }
+wrappr721   = { workspace = true }
 wrappr721-base      = { workspace = true, features = ["library"] }
-wrappr-utils          = { workspace = true }
+sg-std          = { workspace = true }
 thiserror       = { workspace = true }
 url             = { workspace = true }

@@ -7,8 +7,6 @@ pub struct MinterConfig<T> {
     pub factory: Addr,
     pub collection_code_id: u64,
     pub mint_price: Coin,
-    pub jurisdiction: String,
-    pub entity: String,
     pub extension: T,
 }
 
@@ -22,6 +20,8 @@ pub struct MinterConfigResponse<T> {
 #[derive(Default)]
 pub struct Status {
     pub is_verified: bool,
+    pub is_blocked: bool,
+    pub is_explicit: bool,
 }
 
 #[cw_serde]
@@ -41,5 +41,7 @@ pub enum QueryMsg {
 pub enum SudoMsg {
     UpdateStatus {
         is_verified: bool,
+        is_blocked: bool,
+        is_explicit: bool,
     },
 }
