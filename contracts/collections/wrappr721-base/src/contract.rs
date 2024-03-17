@@ -21,8 +21,6 @@ use crate::{ContractError, Wrappr721Contract};
 use crate::entry::{CONTRACT_NAME, CONTRACT_VERSION};
 
 const MAX_DESCRIPTION_LENGTH: u32 = 512;
-const MAX_SHARE_DELTA_PCT: u64 = 2;
-const MAX_ROYALTY_SHARE_PCT: u64 = 10;
 
 impl<'a, T> Wrappr721Contract<'a, T>
 where
@@ -82,8 +80,6 @@ where
 
         self.frozen_collection_info.save(deps.storage, &false)?;
 
-        self.royalty_updated_at
-            .save(deps.storage, &env.block.time)?;
 
         Ok(Response::new()
             .add_attribute("action", "instantiate")
@@ -344,16 +340,6 @@ where
         }
 
         let mut response = Response::new();
-
-        #[allow(clippy::cmp_owned)]
-        if prev_contract_version.version < "3.0.0".to_string() {
-            response = crate::upgrades::v3_0_0::upgrade(deps.branch(), &env, response)?;
-        }
-
-        #[allow(clippy::cmp_owned)]
-        if prev_contract_version.version < "3.1.0".to_string() {
-            response = crate::upgrades::v3_1_0::upgrade(deps.branch(), &env, response)?;
-        }
 
         cw2::set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 
