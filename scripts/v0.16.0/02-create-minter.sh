@@ -1,6 +1,6 @@
 ADMIN=stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk
 FACTORY=stars1z89ugky6tpu837v4nwyvsfdaa3f092xlkx4f5p3utd9336pems7qke68gx
-SG721_CODE_ID=2045
+WRAPPR721_CODE_ID=2045
 KEY=$(starsd keys show $ADMIN | jq -r .name)
 
 # set start time 100 seconds from now
@@ -17,7 +17,7 @@ MSG=$(cat <<EOF
             "per_address_limit": 5
         },
         "collection_params": {
-            "code_id": $SG721_CODE_ID,
+            "code_id": $WRAPPR721_CODE_ID,
             "name": "Collection Name",
             "symbol": "COL",
             "info": {

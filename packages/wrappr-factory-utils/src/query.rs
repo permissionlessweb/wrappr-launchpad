@@ -4,7 +4,7 @@ use crate::CodeId;
 use crate::MinterParams;
 
 #[cw_serde]
-pub enum Sg2QueryMsg {
+pub enum WrapprFactoryQueryMsg {
     /// Returns `ParamsResponse`
     Params {},
     AllowedCollectionCodeIds {},

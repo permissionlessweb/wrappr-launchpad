@@ -14,7 +14,7 @@ use cw_multi_test::Executor;
 use sg_std::{GENESIS_MINT_START_TIME, NATIVE_DENOM};
 use wrappr721_base::msg::{CollectionInfoResponse, QueryMsg as Wrappr721QueryMsg};
 use wrappr_factory_utils::msg::WrapprFactoryExecuteMsg;
-use wrappr_factory_utils::query::{AllowedCollectionCodeIdsResponse, Sg2QueryMsg};
+use wrappr_factory_utils::query::{AllowedCollectionCodeIdsResponse, WrapprFactoryQueryMsg};
 use wrappr_factory_utils::tests::mock_collection_params_1;
 use wrappr_factory_utils::WrapprMinterInitMsgExtension;
 use wrappr_minter::msg::{ConfigResponse, ExecuteMsg};
@@ -54,7 +54,7 @@ fn update_code_id() {
     let res = router.wasm_sudo(factory.clone(), &sudo_msg);
     assert!(res.is_ok());
 
-    let msg = Sg2QueryMsg::AllowedCollectionCodeIds {};
+    let msg = WrapprFactoryQueryMsg::AllowedCollectionCodeIds {};
     let res: AllowedCollectionCodeIdsResponse = router
         .wrap()
         .query_wasm_smart(factory.clone(), &msg)

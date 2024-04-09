@@ -1,7 +1,7 @@
 [package]
 name        = "wrappr721"
 authors     = ["Shane Vitarana <s@noreply.publicawsome.com>"]
-description = "Stargaze Basic NFT Collection Interface"
+description = " Basic NFT Interface for Wrappr"
 version     = { workspace = true }
 edition     = { workspace = true }
 homepage    = { workspace = true }

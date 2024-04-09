@@ -5,7 +5,7 @@ use sg_std::NATIVE_DENOM;
 use crate::common_setup::setup_minter::wrappr_minter::mock_params::MIN_MINT_PRICE;
 use crate::common_setup::setup_minter::wrappr_minter::setup::sudo_update_params;
 use crate::common_setup::templates::wrappr_minter_with_sudo_update_params_template;
-use wrappr_factory_utils::query::Sg2QueryMsg::Params;
+use wrappr_factory_utils::query::WrapprFactoryQueryMsg::Params;
 
 #[test]
 fn happy_path_with_params_update() {

@@ -8,7 +8,7 @@ use cw2::set_contract_version;
 use cw_utils::must_pay;
 use sg_std::NATIVE_DENOM;
 use wrappr_factory_utils::msg::UpdateMinterParamsMsg;
-use wrappr_factory_utils::query::{AllowedCollectionCodeIdResponse, AllowedCollectionCodeIdsResponse, Sg2QueryMsg};
+use wrappr_factory_utils::query::{AllowedCollectionCodeIdResponse, AllowedCollectionCodeIdsResponse, WrapprFactoryQueryMsg};
 use wrappr_factory_utils::MinterParams;
 // use sg_std::NATIVE_DENOM;
 
@@ -184,13 +184,13 @@ pub fn update_params<T, C>(
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(deps: Deps, _env: Env, msg: Sg2QueryMsg) -> StdResult<Binary> {
+pub fn query(deps: Deps, _env: Env, msg: WrapprFactoryQueryMsg) -> StdResult<Binary> {
     match msg {
-        Sg2QueryMsg::Params {} => to_json_binary(&query_params(deps)?),
-        Sg2QueryMsg::AllowedCollectionCodeIds {} => {
+        WrapprFactoryQueryMsg::Params {} => to_json_binary(&query_params(deps)?),
+        WrapprFactoryQueryMsg::AllowedCollectionCodeIds {} => {
             to_json_binary(&query_allowed_collection_code_ids(deps)?)
         }
-        Sg2QueryMsg::AllowedCollectionCodeId(code_id) => {
+        WrapprFactoryQueryMsg::AllowedCollectionCodeId(code_id) => {
             to_json_binary(&query_allowed_collection_code_id(deps, code_id)?)
         }
     }

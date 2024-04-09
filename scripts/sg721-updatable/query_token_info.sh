@@ -4,7 +4,7 @@ MSG=$(cat <<EOF
 }
 EOF
 )
-echo $MSG $SG721
+echo $MSG $WRAPPR721
 
-starsd q wasm contract-state smart $SG721 "$MSG"
+starsd q wasm contract-state smart $WRAPPR721 "$MSG"
 

@@ -173,7 +173,7 @@ mod tests {
 
     mod start_trading_time {
         use cosmwasm_std::{Decimal, Empty, Timestamp};
-        use wrappr721::{ UpdateCollectionInfoMsg};
+        use wrappr721::UpdateCollectionInfoMsg;
 
         use crate::common_setup::{
             setup_accounts_and_block::setup_block_time,
@@ -193,10 +193,8 @@ mod tests {
             // customize params so external_link is None
             let mut params = mock_collection_params();
             params.info.external_link = None;
-            let custom_create_minter_msg = mock_create_minter_init_msg(
-                params.clone(),
-                mock_init_extension(None, None),
-            );
+            let custom_create_minter_msg =
+                mock_create_minter_init_msg(params.clone(), mock_init_extension(None, None));
             let (app, contract) = custom_proper_instantiate(custom_create_minter_msg.clone());
 
             // // default trading start time is start time + default trading start time offset
@@ -231,7 +229,6 @@ mod tests {
             );
             assert!(res.is_ok());
 
-           
             // update explicit content with new creator
             let res = app.execute_contract(
                 creator,

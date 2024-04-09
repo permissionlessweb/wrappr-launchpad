@@ -46,6 +46,6 @@ full_tx_msg=$(printf "[%s]" "${msgs[*]}")
 # Print the full tx msg
 echo "$full_tx_msg"
 
-starsd tx wasm execute $SG721 "$MSG" \
+starsd tx wasm execute $WRAPPR721 "$MSG" \
 --gas-prices 0.025ustars --gas auto --gas-adjustment 1.9 \
 --from $KEY -y -b block -o json | jq .

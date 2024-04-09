@@ -1,4 +1,4 @@
-SG721=stars1naqvlqkh8yccuwv6a566hdt4flrrz5933lhva0jmsp2kgjhuh3zqf6avr4
+WRAPPR721=stars1naqvlqkh8yccuwv6a566hdt4flrrz5933lhva0jmsp2kgjhuh3zqf6avr4
 
 MSG=$(cat <<EOF
 {
@@ -8,4 +8,4 @@ EOF
 )
 echo $MSG
 
-starsd q wasm contract-state smart $SG721 "$MSG"
+starsd q wasm contract-state smart $WRAPPR721 "$MSG"

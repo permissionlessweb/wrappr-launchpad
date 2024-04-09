@@ -11,7 +11,7 @@ use cosmwasm_std::{
 };
 use cw2::set_contract_version;
 use cw_utils::{must_pay, nonpayable, parse_reply_instantiate_data};
-use wrappr_factory_utils::query::Sg2QueryMsg;
+use wrappr_factory_utils::query::WrapprFactoryQueryMsg;
 use wrappr_minter_utils::{QueryMsg, Status, StatusResponse, SudoMsg};
 use wrappr721::{ExecuteMsg as Wrappr721ExecuteMsg, InstantiateMsg as Wrappr721InstantiateMsg};
 use wrappr721_base::msg::{CollectionInfoResponse, QueryMsg as Wrappr721QueryMsg};
@@ -24,7 +24,7 @@ use url::Url;
 
 const CONTRACT_NAME: &str = "crates.io:sg-base-minter";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
-const INSTANTIATE_SG721_REPLY_ID: u64 = 1;
+const INSTANTIATE_WRAPPR721_REPLY_ID: u64 = 1;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
@@ -44,7 +44,7 @@ pub fn instantiate(
     // This will fail if the sender cannot parse a response from the factory contract
     let factory_params: ParamsResponse = deps
         .querier
-        .query_wasm_smart(factory.clone(), &Sg2QueryMsg::Params {})?;
+        .query_wasm_smart(factory.clone(), &WrapprFactoryQueryMsg::Params {})?;
 
     let config = Config {
         factory: factory.clone(),
@@ -76,12 +76,12 @@ pub fn instantiate(
                 .to_string(),
         ),
         label: format!(
-            "SG721-{}-{}",
+            "WRAPPR721-{}-{}",
             msg.collection_params.code_id,
             msg.collection_params.name.trim()
         ),
     };
-    let submsg = SubMsg::reply_on_success(wasm_msg, INSTANTIATE_SG721_REPLY_ID);
+    let submsg = SubMsg::reply_on_success(wasm_msg, INSTANTIATE_WRAPPR721_REPLY_ID);
 
     Ok(Response::new()
         .add_attribute("action", "instantiate")
@@ -134,7 +134,7 @@ pub fn execute_mint_sender(
 
     let factory: ParamsResponse = deps
         .querier
-        .query_wasm_smart(config.factory, &Sg2QueryMsg::Params {})?;
+        .query_wasm_smart(config.factory, &WrapprFactoryQueryMsg::Params {})?;
     let factory_params = factory.params;
 
     let funds_sent = must_pay(&info, NATIVE_DENOM)?;
@@ -268,7 +268,7 @@ pub fn query_status(deps: Deps) -> StdResult<StatusResponse> {
 // Reply callback triggered from wrappr721 contract instantiation in instantiate()
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn reply(deps: DepsMut, _env: Env, msg: Reply) -> Result<Response, ContractError> {
-    if msg.id != INSTANTIATE_SG721_REPLY_ID {
+    if msg.id != INSTANTIATE_WRAPPR721_REPLY_ID {
         return Err(ContractError::InvalidReplyID {});
     }
 

@@ -1,6 +1,6 @@
 KEY=$(starsd keys show $ADMIN | jq -r .name)
 FACTORY=stars1es4mm9x75xd6j2ew6esj5f5sul3lukyxfeuhu835hdxq2e0qnkuskl2wkz
-SG721_CODE_ID=1979
+WRAPPR721_CODE_ID=1979
 
 # init msg
 # WrapprMinterInitMsgExtension {
@@ -44,7 +44,7 @@ MSG=$(cat <<EOF
             "per_address_limit": 30
         },
         "collection_params": {
-            "code_id": $SG721_CODE_ID,
+            "code_id": $WRAPPR721_CODE_ID,
             "name": "Test Collection yubo",
             "symbol": "YUBO",
             "info": {
