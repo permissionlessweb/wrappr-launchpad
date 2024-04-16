@@ -1,12 +1,10 @@
-# Stargaze Security Policy
+# Security Policy
 
-The Stargaze core team and community takes all security issues and vulnerabilities very seriously.
+Thanks for improving the security of Wrappr. We appreciate your efforts. Following these responsible disclosure guidelines will make sure your contribution is acknowledged.
 
-Thanks for improving the security of Stargaze. We appreciate your efforts. Following these responsible disclosure guidelines will make sure your contribution is acknowledged.
+Please report security vulnerabilities to <>. _Please avoid opening a public Github issue or posting on social media or Discord_.
 
-Please report security vulnerabilities to <security@stargaze.dev>. _Please avoid opening a public Github issue or posting on social media or Discord_.
-
-The Stargaze team will respond with the next steps following the email within the next 2 working days. The team will keep you informed on the remediation process and may ask for additional guidance/information.
+The Wrappr team will respond with the next steps following the email within the next 2 working days. The team will keep you informed on the remediation process and may ask for additional guidance/information.
 
 Please include the following in your report:
 

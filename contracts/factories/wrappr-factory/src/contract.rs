@@ -8,14 +8,16 @@ use cw2::set_contract_version;
 use cw_utils::must_pay;
 use sg_std::NATIVE_DENOM;
 use wrappr_factory_utils::msg::UpdateMinterParamsMsg;
-use wrappr_factory_utils::query::{AllowedCollectionCodeIdResponse, AllowedCollectionCodeIdsResponse, WrapprFactoryQueryMsg};
+use wrappr_factory_utils::query::{
+    AllowedCollectionCodeIdResponse, AllowedCollectionCodeIdsResponse, WrapprFactoryQueryMsg,
+};
 use wrappr_factory_utils::MinterParams;
 // use sg_std::NATIVE_DENOM;
 
 use crate::error::ContractError;
 use crate::msg::{
-    WrapprMinterCreateMsg, BaseSudoMsg, BaseUpdateParamsMsg, ExecuteMsg, InstantiateMsg,
-    ParamsResponse, SudoMsg,
+    BaseSudoMsg, BaseUpdateParamsMsg, ExecuteMsg, InstantiateMsg, ParamsResponse, SudoMsg,
+    WrapprMinterCreateMsg,
 };
 use crate::state::SUDO_PARAMS;
 

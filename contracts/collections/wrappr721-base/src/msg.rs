@@ -16,10 +16,6 @@ use cw_ownable::cw_ownable_query;
 use cw_utils::Expiration;
 
 
-// use sg_std::NATIVE_DENOM;
-// use sg_std::{Response, SubMsg, NATIVE_DENOM};
-
-
 #[cw_ownable_execute]
 #[cw_serde]
 pub enum ExecuteMsg<T, E> {

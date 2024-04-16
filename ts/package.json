@@ -1,5 +1,5 @@
 {
-  "name": "@stargazezone/launchpad",
+  "name": "@wrappr/cw-wrappr",
   "version": "3.5.0",
   "description": "Stargaze Launchpad CosmWasm Typescript Types",
   "main": "index.js",

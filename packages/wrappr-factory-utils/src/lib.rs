@@ -31,4 +31,5 @@ pub struct WrapprMinterInitMsgExtension {
     pub whitelist: Option<String>,
     pub entity: String,
     pub jurisdiction: String,
+    pub token_uri: String,
 }

@@ -19,7 +19,7 @@ license    = "Apache-2.0"
 wrappr-factory    = { version = "0.1.0", path = "contracts/factories/wrappr-factory" }
 wrappr-minter     = { version = "0.1.0", path = "contracts/minters/wrappr-minter" }
 cosmwasm-schema = "1.5.0"
-cosmwasm-std    = "1.5.0"
+cosmwasm-std    = {version = "1.5.0", features = ["cosmwasm_1_2"]}
 cw-controllers  = "1.1.0"
 cw2             = "1.1.0"
 cw4             = "1.1.0"
