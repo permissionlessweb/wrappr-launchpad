@@ -1,7 +1,12 @@
-cd packages/wrappr-utils && cargo publish && cd ../..
+cd packages/wrappr721 && cargo publish && cd ../..
 sleep 10
-cd packages/wr4 && cargo publish && cd ../..
+cd packages/sg-metadata && cargo publish && cd ../..
 sleep 10
-cd packages/wr2 && cargo publish && cd ../..
+cd packages/sg4 && cargo publish && cd ../..
 sleep 10
-
+cd packages/sg2 && cargo publish && cd ../..
+sleep 10
+cd packages/controllers && cargo publish && cd ../..
+sleep 10
+cd packages/ethereum-verify && cargo publish && cd ../..
+sleep 10
