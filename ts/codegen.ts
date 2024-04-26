@@ -4,17 +4,28 @@ codegen({
   contracts: [
     {
       name: "WrapprFactory",
-      dir: "../contracts/wrappr-factory/schema",
+      dir: "../contracts/factories/wrappr-factory/schema",
     },
     {
       name: "WrapprMinter",
-      dir: "../contracts/wrappr-minter/schema",
-    }
+      dir: "../contracts/minters/wrappr-minter/schema",
+    },
+    {
+      name: "Wrappr721Base",
+      dir: "../contracts/collections/wrappr721-base/schema",
+    },
     // {
-    //   name: "CwWrappr",
-    //   dir: "../contracts/cw-wrappr/schema",
+    //   name: "Sg721MetadataOnchain",
+    //   dir: "../contracts/collections/wrappr721-metadata-onchain/schema",
     // },
-  
+    // {
+    //   name: "Sg721Updatable",
+    //   dir: "../contracts/collections/wrappr721-updatable/schema",
+    // },
+    // {
+    //   name: "Sg721Nt",
+    //   dir: "../contracts/collections/wrappr721-nt/schema",
+    // },
   ],
   outPath: "./src/",
 
